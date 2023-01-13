@@ -7,7 +7,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const login = () => {
-
+    console.log('hello')
     fetch('http://10.10.34.109:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -23,9 +23,9 @@ const LoginScreen = ({ navigation }) => {
         } else if (data.success == 1) {
           Alert.alert(
             data.message,
-            "",
+            "Success",
             [
-              { text: "OK"}
+              { text: "OK", onPress: () =>{navigation.navigate('ChatroomScreen')} }
             ]
           )
         }
