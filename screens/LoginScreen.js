@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import BottomTabNavigator from '../navigators/TabNavigator';
+ 
 
+//Screen to login
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,16 +21,11 @@ const LoginScreen = ({ navigation }) => {
     })
     .then(data => data.json())
     .then(data =>  { 
+      console.log(data.success)
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.success == 1) {
-          Alert.alert(
-            data.message,
-            "Success",
-            [
-              { text: "OK", onPress: () =>{navigation.navigate('Chat')} }
-            ]
-          )
+          {navigation.navigate('ChatsListScreen')}
         }
       }
     )
