@@ -10,6 +10,7 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
+
   const register = () => {
 
     if(password != password_validation){
@@ -42,8 +43,8 @@ const RegisterScreen = ({ navigation }) => {
     }
   }
 
-  
   return (
+
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <Input
         placeholder='Enter your First Name'
