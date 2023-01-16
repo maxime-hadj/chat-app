@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import BottomTabNavigator from '../navigators/TabNavigator';
- 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 //Screen to login
 const LoginScreen = ({ navigation }) => {
@@ -11,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
 
   const login = () => {
     // console.log('hello')
-    fetch('http://10.10.3.96:3000/api/users/login', { 
+    fetch('http://10.10.40.182:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -21,14 +22,17 @@ const LoginScreen = ({ navigation }) => {
     })
     .then(data => data.json())
     .then(data =>  { 
-      console.log(data.success)
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.success == 1) {
-          {navigation.navigate('ChatsListScreen')}
+          console.log(data.token)
+          AsyncStorage.setItem('user_token', data.token);
+          navigation.navigate('Register')
         }
       }
-    )
+    ).catch(function(error) {
+      console.log('There has been a problem with your fetch operation: ' + error.message);
+    });
   }
     
   return (
