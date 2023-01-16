@@ -11,6 +11,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const login = () => {
+
     fetch('http://10.10.40.182:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -24,9 +25,8 @@ const LoginScreen = ({ navigation }) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.success == 1) {
-          console.log(data.token)
           AsyncStorage.setItem('user_token', data.token);
-          navigation.navigate('Register')
+          navigation.navigate('Users')
         }
       }
     ).catch(function(error) {
