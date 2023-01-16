@@ -7,8 +7,8 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const login = () => {
-    console.log('hello')
-    fetch('http://10.10.37.82:3000/api/users/login', { 
+    // console.log('hello')
+    fetch('http://10.10.3.96:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
