@@ -13,6 +13,8 @@ const RegisterScreen = ({ navigation }) => {
 
   const register = () => {
 
+    _retrieveData();
+
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
@@ -43,6 +45,8 @@ const RegisterScreen = ({ navigation }) => {
     }
   }
 
+ 
+  
   return (
 
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>

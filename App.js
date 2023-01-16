@@ -3,8 +3,6 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
-import HomeScreen from './screens/HomeScreen'
-import UserslistScreen from './screens/UsersListScreen'
 
 const Stack = createStackNavigator()
 export default function App() {
