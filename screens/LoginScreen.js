@@ -12,7 +12,7 @@ const LoginScreen = ({ navigation }) => {
 
   const login = () => {
 
-    fetch('http://10.10.3.96:3000/api/users/login', { 
+    fetch('http://10.10.43.219:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -32,8 +32,7 @@ const LoginScreen = ({ navigation }) => {
               { text: "OK", onPress: () =>{navigation.navigate('Chat')} }
             ]
           )
-          // AsyncStorage.setItem('user_token', data.token);
-          // navigation.navigate('Users')
+          AsyncStorage.setItem('user_token', data.token);
         }
       }
     ).catch(function(error) {
