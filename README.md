@@ -9,3 +9,5 @@ npm i @react-navigation/native
 npm i @react-navigation/stack
 
 npm i react-native-elements
+
+

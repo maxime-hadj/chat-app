@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const AllUsersScreen = ({ navigation }) =>{
+const UsersListScreen = ({ navigation }) =>{
     
-
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -17,9 +16,8 @@ const AllUsersScreen = ({ navigation }) =>{
     const getAllUser = async () =>    {
 
         const userToken = await AsyncStorage.getItem('user_token');
-        console.log(userToken)
         setLoading(true);
-        fetch('http://10.10.40.182:3000/api/users', {
+        fetch('http://10.10.43.219:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })
@@ -37,8 +35,21 @@ const AllUsersScreen = ({ navigation }) =>{
         return <Text>Loading...</Text>
     }
 
+    const styles = StyleSheet.create({
+      container: {
+        flex: 1,
+        paddingTop: StatusBar.currentHeight,
+      },
+      scrollView: {
+        marginHorizontal: 20,
+      },
+      text: {
+        fontSize: 42,
+      },
+    });
+
     return (
-        <View>
+      <ScrollView style={styles.scrollView}>
         <FlatList
             data={users}
             renderItem={({ item }) => (
@@ -50,8 +61,10 @@ const AllUsersScreen = ({ navigation }) =>{
             )}
             keyExtractor={item => item.id}
         />
-        </View>
+      </ScrollView>
     );
+
+
 };
 
-    export default AllUsersScreen;
+    export default UsersListScreen;
