@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 
-
+//Register screen
 const RegisterScreen = ({ navigation }) => {
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
@@ -10,7 +10,10 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
+
   const register = () => {
+
+    _retrieveData();
 
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
@@ -42,8 +45,10 @@ const RegisterScreen = ({ navigation }) => {
     }
   }
 
+ 
   
   return (
+
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <Input
         placeholder='Enter your First Name'
