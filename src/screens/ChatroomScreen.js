@@ -3,13 +3,13 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
+// Si on clique sur le nom du channel qui sera en haut de la page, 
+// on est envoyé vers la liste des participants du channel (ChatroomUsersScreen)
 
 const ChatroomScreen = (props) => {
   const [messages, setMessages] = useState([]);
  
-
-
-
   useEffect(() => {
 
     const fetchMessages = async () =>    {

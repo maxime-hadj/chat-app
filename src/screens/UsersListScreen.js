@@ -3,6 +3,8 @@ import { View, Text, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Ecran UsersListScreen => affichage de la liste des users
+// Si on clique sur un User on est envoyé vers la conversation privée avec ce user donc l'écran PrivateChatScreen
 
 const UsersListScreen = (props) =>{
     

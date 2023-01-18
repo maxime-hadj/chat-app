@@ -3,7 +3,9 @@ import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//Update profile
+// Ecran UpdateProfileScreen => écran avec form pour que l'utilisateur modifie ses infos, 
+// quand validé, retour vers le ProfileScreen
+
 const UpdateProfileScreen = (props) => {
 
   const [firstname, setFirstname] = useState('');
@@ -12,7 +14,7 @@ const UpdateProfileScreen = (props) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
-  
+
 
   if(password != password_validation){
     alert.alert("Your passwords doesn't match.")
