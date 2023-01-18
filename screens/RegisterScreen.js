@@ -36,7 +36,7 @@ const RegisterScreen = ({ navigation }) => {
               "Successfully registered",
               "Press OK to login",
               [
-                { text: "OK", onPress: () =>{navigation.navigate('Login')} }
+                { text: "OK", onPress: () =>{navigation.navigate('App')} }
               ]
             )
           }
