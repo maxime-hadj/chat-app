@@ -18,7 +18,7 @@ const UsersListScreen = ({ navigation }) =>{
         const userToken = await AsyncStorage.getItem('user_token');
         console.log(userToken)
         setLoading(true);
-        fetch('http://10.10.3.96:3000/api/users', {
+        fetch('http://10.10.45.245:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })

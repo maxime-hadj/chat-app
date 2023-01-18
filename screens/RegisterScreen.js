@@ -13,12 +13,11 @@ const RegisterScreen = ({ navigation }) => {
 
   const register = () => {
 
-    _retrieveData();
 
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
-      fetch('http://10.10.3.96:3000/api/users', { 
+      fetch('http://10.10.45.245:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -42,6 +41,9 @@ const RegisterScreen = ({ navigation }) => {
             )
           }
       })
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+    })
     }
   }
 

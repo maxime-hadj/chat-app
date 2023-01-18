@@ -17,7 +17,7 @@ const ChatroomScreen = ({navigation}) => {
       console.log(userToken)
   
         //Fetching the messages from the channel - faudra changer le param en dur avec les props
-      fetch('http://10.10.43.219:3000/api/message/1', {
+      fetch('http://10.10.45.245:3000/api/message/1', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
       })
