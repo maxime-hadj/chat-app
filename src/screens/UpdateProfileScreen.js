@@ -12,6 +12,8 @@ const UpdateProfileScreen = (props) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
+  
+
   if(password != password_validation){
     alert.alert("Your passwords doesn't match.")
   } else {

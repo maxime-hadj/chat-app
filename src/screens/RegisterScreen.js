@@ -13,8 +13,6 @@ const RegisterScreen = (props) => {
 
   const register = () => {
 
-    _retrieveData();
-
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
