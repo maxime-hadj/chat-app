@@ -5,6 +5,7 @@ import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import UsersListScreen from './screens/UsersListScreen'
 import ChatroomScreen from './screens/ChatroomScreen'
+import ProfileScreen from './screens/ProfileScreen'
 
 //Navigations components
 import {NavigationContainer} from '@react-navigation/native'
@@ -47,6 +48,7 @@ export default function App() {
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="Users" component={UsersListScreen} />
             <Stack.Screen name='Chat' component={ChatroomScreen} />
+            <Stack.Screen name='Update' component={ProfileScreen} />
           </>
       </Stack.Navigator>
     </NavigationContainer>
