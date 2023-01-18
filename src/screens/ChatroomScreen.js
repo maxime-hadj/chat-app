@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React, { useState, useCallback, useEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 
-const ChatroomScreen = ({navigation}) => {
+const ChatroomScreen = (props) => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const UsersListScreen = ({ navigation }) =>{
+const UsersListScreen = (props, { navigation }) =>{
     
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ const UsersListScreen = ({ navigation }) =>{
 
         const userToken = await AsyncStorage.getItem('user_token');
         setLoading(true);
-        fetch('http://10.10.43.219:3000/api/users', {
+        fetch('http://10.10.46.253:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })
@@ -49,7 +49,7 @@ const UsersListScreen = ({ navigation }) =>{
     });
 
     return (
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} >
         <FlatList
             data={users}
             renderItem={({ item }) => (

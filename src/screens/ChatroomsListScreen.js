@@ -3,7 +3,7 @@ import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 
 //Screen with the list of all the chatrooms
-const ChatroomsListScreen = ({ navigation }) => {
+const ChatroomsListScreen = (props) => {
     
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>

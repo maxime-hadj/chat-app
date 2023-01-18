@@ -63,7 +63,6 @@ function ChatsListStackScreen() {
     return(
         <Stack.Navigator>
             <Stack.Screen name="Discussions" component={ChatsListScreen}/>
-            <Stack.Screen name="Discussion" component={PrivateChatScreen}/>
         </Stack.Navigator>
     )
 }
@@ -80,67 +79,54 @@ function UsersListStackScreen() {
 
 const Tab = createBottomTabNavigator()
 
-export default function Navigation(props)  {
+function TabNavigation() {
+    <Tab.Navigator
+    screenOptions={({route}) => ({
+        headerTitle:() =><Text>Header</Text>,
+        headerShown: false,
+        tabBarIcon: ({focused, color, size, padding}) => {
+            let iconName;
+            if(route.name === 'Private discussions') {
+                iconName = 'person'
+            } else if (route.name === 'Persons') {
+                iconName = 'person'
+            } else if (route.name === 'Chatroom') {
+                iconName = 'person'
+            } else if (route.name === 'Profile') {
+                iconName = 'person'
+            }
 
-    const userToken = AsyncStorage.getItem('user_token');
+            return (
+                <Icon 
+                    name={iconName} 
+                    size={size} 
+                    color={color} 
+                    style={{paddingBottom: padding}} 
+                />
+            )
+        }
+    })}
 
-    console.log('user')
-    console.log(userToken)
-
-    if (userToken._A == null) {
-        return  (
-            <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen name="Login" component={LoginScreen}/>
-                    <Stack.Screen name="Register" component={RegisterScreen}/>
-                </Stack.Navigator>
-            </NavigationContainer>
-        )
-    } else {
-        return(
-            <NavigationContainer>
-                <Tab.Navigator
-                    screenOptions={({route}) => ({
-                        headerTitle:() =><Text>Header</Text>,
-                        tabBarIcon: ({focused, color, size, padding}) => {
-                            let iconName;
-                            if(route.name === 'Private discussions') {
-                                iconName = 'comment-discussion'
-                            } else if (route.name === 'Persons') {
-                                iconName = 'person'
-                            } else if (route.name === 'Chatroom') {
-                                iconName = 'persons'
-                            } else if (route.name === 'Profile') {
-                                iconName = 'profile'
-                            }
-
-                            return (
-                                <Icon 
-                                    name={iconName} 
-                                    size={size} 
-                                    color={color} 
-                                    style={{paddingBottom: padding}} 
-                                />
-                            )
-                        }
-                    })}
-                    
-                    tabBarOptions ={{
-                        activeTintColor: 'lightseagreen',
-                        inactiveTintColor: 'grey',
-                        labelStyle: {fontSize:16},
-                        // style:{width: fullScreenWidth},
-                    }}
-                >
-                    <Tab.Screen name="Private discussions" component={ChatsListStackScreen} />
-                    <Tab.Screen name="Persons" component={UsersListStackScreen} />
-                    <Tab.Screen name="Chatrooms" component={ChatsroomsStackScreen} />
-                    <Tab.Screen name="Profile" component={ProfileStackScreen} />
-                </Tab.Navigator>
-            </NavigationContainer>
-        )
-
-    }
+    >
+        <Tab.Screen name="Private discussions" component={ChatsListStackScreen} />
+        <Tab.Screen name="Persons" component={UsersListStackScreen} />
+        <Tab.Screen name="Chatrooms" component={ChatsroomsStackScreen} />
+        <Tab.Screen name="Profile" component={ProfileStackScreen} />
+    </Tab.Navigator>
 }
 
+const Navigation = (props) => {
+  
+    return  (
+    <NavigationContainer>
+        <Stack.Navigator>
+            <Stack.Screen name="Login" component={LoginScreen}/>
+            <Stack.Screen name="Register" component={RegisterScreen}/>
+            <Stack.Screen name="Private discussions" component={TabNavigation}/>
+        </Stack.Navigator>
+    </NavigationContainer>      
+    )
+}
+
+export default Navigation
 

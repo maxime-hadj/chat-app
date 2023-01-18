@@ -3,7 +3,7 @@ import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 
 //Register screen
-const RegisterScreen = ({ navigation }) => {
+const RegisterScreen = (props) => {
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
@@ -18,7 +18,7 @@ const RegisterScreen = ({ navigation }) => {
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
-      fetch('http://10.10.43.219:3000/api/users', { 
+      fetch('http://10.10.46.253:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -37,7 +37,7 @@ const RegisterScreen = ({ navigation }) => {
               "Successfully registered",
               "Press OK to login",
               [
-                { text: "OK", onPress: () =>{navigation.navigate('Login')} }
+                { text: "OK", onPress: () =>{props.navigation.navigate('Login')} }
               ]
             )
           }

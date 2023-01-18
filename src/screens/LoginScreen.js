@@ -6,13 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 //Screen to login
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const login = () => {
 
-    fetch('http://10.10.43.219:3000/api/users/login', { 
+    fetch('http://10.10.46.253:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -25,8 +25,7 @@ const LoginScreen = ({ navigation }) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.success == 1) {
-          AsyncStorage.setItem('user_token', data.token);
-          navigation.navigate('Profile')
+          props.navigation.navigate('App')
         }
       }
     ).catch(function(error) {
@@ -35,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
   }
     
   return (
-    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ justifyContent: 'center', alignItems: 'center' }} >
       <Input
         placeholder='Enter your Email'
         label='Email'
@@ -53,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
       />
       
       <Button title='Sign In' onPress={()=> login()} />
-        <Text onPress={()=>{navigation.navigate('Register')}} style={{ fontSize: 15 }}>
+        <Text onPress={()=>{props.navigation.navigate('Register')}} style={{ fontSize: 15 }}>
           Not registered ? Sign up here !
         </Text>
     </View>
