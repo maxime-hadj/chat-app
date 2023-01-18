@@ -3,8 +3,6 @@ import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
 //Screen to login
 const LoginScreen = (props) => {
   const [email, setEmail] = useState('');

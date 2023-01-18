@@ -4,7 +4,7 @@ import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const UsersListScreen = (props, { navigation }) =>{
+const UsersListScreen = (props) =>{
     
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ const UsersListScreen = (props, { navigation }) =>{
     });
 
     return (
-      <ScrollView style={styles.scrollView} >
+      <ScrollView >
         <FlatList
             data={users}
             renderItem={({ item }) => (

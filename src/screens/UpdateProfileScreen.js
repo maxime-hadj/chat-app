@@ -1,52 +1,51 @@
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//Register screen
-const RegisterScreen = (props) => {
+//Update profile
+const UpdateProfileScreen = (props) => {
+
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
-
-  const register = () => {
-
-    _retrieveData();
-
-    if(password != password_validation){
-      alert.alert("Your passwords doesn't match.")
-    } else {
-      fetch('http://10.10.46.253:3000/api/users', { 
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          password: password,
-        })
+  if(password != password_validation){
+    alert.alert("Your passwords doesn't match.")
+  } else {
+    fetch('http://10.10.45.245:3000/api/users', { 
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken},
+      body: JSON.stringify({
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: password,
       })
-      .then(data => data.json())
-      .then(data =>  { 
-          if(data.error) {
-            Alert.alert(data.error)
-          } else if (data.success == 1) {
-            Alert.alert(
-              "Successfully registered",
-              "Press OK to login",
-              [
-                { text: "OK", onPress: () =>{props.navigation.navigate('Login')} }
-              ]
-            )
-          }
-      })
-    }
+    })
+    .then(data => data.json())
+    .then(data =>  { 
+        if(data.error) {
+          Alert.alert(data.error)
+        } else if (data.success == 1) {
+          Alert.alert(
+            "Successfully updated",
+            "Press OK to chat",
+            [
+              { text: "OK", onPress: () =>{props.navigation.navigate('Profile')} }
+            ]
+          )
+        }
+    })
+    .catch(function(error) {
+      console.log('There has been a problem with your fetch operation: ' + error.message);
+  })
   }
 
- 
-  
+
+
   return (
 
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -83,7 +82,6 @@ const RegisterScreen = (props) => {
         id={password}
         secureTextEntry
       />
-
       <Input
         placeholder='Confirm your Password'
         label='Password validation'
@@ -95,12 +93,12 @@ const RegisterScreen = (props) => {
       />
       
       <Button title='Register' onPress={()=> register()} />
-        <Text onPress={()=>{props.navigation.navigate('Login')}} style={{ fontSize: 15 }}>
-          Got an account ? Login here !
+        <Text onPress={()=>{navigation.navigate('Chat')}} style={{ fontSize: 15 }}>
+          Chat here !
         </Text>
     </View>
   )
-}
+};
 
 
-export default RegisterScreen
+export default UpdateProfileScreen
