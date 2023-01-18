@@ -4,7 +4,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const ChatroomScreen = ({navigation}) => {
+const ChatroomScreen = (props) => {
   const [messages, setMessages] = useState([]);
  
 
