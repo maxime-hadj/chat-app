@@ -59,7 +59,13 @@ const ChatroomsListScreen = (props) => {
           data={chatrooms}
           renderItem={({ item }) => (
           <View>
-              <Text id={item.id_channel} onPress={()=>{props.navigation.navigate('Chatroom')}}>{item.channel_name}</Text>
+              <Text 
+                id={item.id_channel} 
+                onPress={()=>{props.navigation.navigate('Chatroom',
+                {
+                  id_channel: item.id_channel
+                }
+                )}}>{item.channel_name}</Text>
           </View>
           )}
           keyExtractor={item => item.id}
