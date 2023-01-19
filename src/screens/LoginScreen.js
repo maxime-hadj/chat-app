@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -8,9 +8,10 @@ const LoginScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = () => {
+  const login = async () => {
 
-    fetch('http://10.10.46.253:3000/api/users/login', { 
+    console.log('coucou')
+    fetch('http://192.168.0.12:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -23,6 +24,7 @@ const LoginScreen = (props) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.success == 1) {
+          AsyncStorage.setItem('user_token', data.token)
           props.navigation.navigate('App')
         }
       }
