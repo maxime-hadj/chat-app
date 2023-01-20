@@ -21,7 +21,7 @@ const ChatroomsListScreen = (props) => {
       const userToken = await AsyncStorage.getItem('user_token');
       setLoading(true);
 
-      fetch('http://192.168.0.12:3000/api/channel', {
+      fetch('http://10.10.50.62:3000/api/channel', {
           method: 'GET',
           headers:{ Authorization: 'Bearer ' + userToken },
       })

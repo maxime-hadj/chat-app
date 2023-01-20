@@ -14,12 +14,13 @@ const UpdateProfileScreen = (props) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
-
+const update = async () =>{
 
   if(password != password_validation){
     alert.alert("Your passwords doesn't match.")
   } else {
-    fetch('http://10.10.45.245:3000/api/users', { 
+    const userToken = await AsyncStorage.getItem('user_token');
+    fetch('http://10.10.50.62:3000/api/users', { 
       method: 'PATCH',
       headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken},
       body: JSON.stringify({
@@ -47,7 +48,7 @@ const UpdateProfileScreen = (props) => {
       console.log('There has been a problem with your fetch operation: ' + error.message);
   })
   }
-
+}
 
 
   return (
@@ -96,7 +97,7 @@ const UpdateProfileScreen = (props) => {
         secureTextEntry
       />
       
-      <Button title='Register' onPress={()=> register()} />
+      <Button title='update' onPress={()=> update()} />
         <Text onPress={()=>{navigation.navigate('Chat')}} style={{ fontSize: 15 }}>
           Chat here !
         </Text>
