@@ -78,11 +78,10 @@ const ChatroomScreen = (props) => {
 
   //Call fetching previous messages with layoutEffect
   useLayoutEffect(() => {
-
     getMessagesFromDb()
-
   }, []);
 
+  //Call sending messages in db and then messages from db to reload the discussion
   const onSend = useCallback((messages = []) => {
     const { _id, createdAt, text, user,} = messages[0]
     sendMessagesInDb(messages[0].text)
