@@ -18,22 +18,21 @@ const ChatroomsListScreen = (props) => {
 
   const getAllChatrooms = async () =>    {
 
-      const userToken = await AsyncStorage.getItem('user_token');
-      setLoading(true);
+    const userToken = await AsyncStorage.getItem('user_token');
+    setLoading(true);
 
-      fetch('http://10.10.50.62:3000/api/channel', {
-          method: 'GET',
-          headers:{ Authorization: 'Bearer ' + userToken },
-      })
-      .then(response => response.json())
-      .then(response =>{
-          console.log(response.data)
-          setChatrooms(response.data);
-          setLoading(false);
-      })
-      .catch(function(error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
-      })
+    fetch('http://10.10.51.81:3000/api/channel', {
+        method: 'GET',
+        headers:{ Authorization: 'Bearer ' + userToken },
+    })
+    .then(response => response.json())
+    .then(response =>{
+        setChatrooms(response.data);
+        setLoading(false);
+    })
+    .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+    })
   }
 
   if (loading) {
@@ -63,12 +62,17 @@ const ChatroomsListScreen = (props) => {
                 id={item.id_channel} 
                 onPress={()=>{props.navigation.navigate('Chatroom',
                 {
-                  id_channel: item.id_channel
+                  id_channel: item.id_channel,
+                  token: props.route.params.token,
+                  userId: props.route.params.userId,
+                  userName: props.route.params.userName,
+                  userEmail: props.route.params.userEmail,
+                  userRole: props.route.params.userRole
                 }
                 )}}>{item.channel_name}</Text>
           </View>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id_channel}
       />
     </View>
   );

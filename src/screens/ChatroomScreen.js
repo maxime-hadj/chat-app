@@ -1,64 +1,108 @@
 import { View, Text } from 'react-native'
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import jwt_decode from "jwt-decode";
 
 // Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
 // Si on clique sur le nom du channel qui sera en haut de la page, 
 // on est envoyé vers la liste des participants du channel (ChatroomUsersScreen)
 
 const ChatroomScreen = (props) => {
+
+  const apiMessage = 'http://10.10.51.81:3000/api/message/'
+
+  const idChannel = props.route.params.id_channel
+  const token = props.route.params.token
+  const userId = props.route.params.userId
+  const userName = props.route.params.userName
+
+  let apiUrl 
+
   const [messages, setMessages] = useState([]);
- 
-  useEffect(() => {
 
-    const fetchMessages = async () =>    {
-      const userToken = await AsyncStorage.getItem('user_token');
-      console.log(userToken)
-  
-        //Fetching the messages from the channel - faudra changer le param en dur avec les props
-      fetch('http://10.10.50.62:3000/api/message/1', {
-        method: 'GET',
-        headers:{ Authorization: 'Bearer ' + userToken },
-      })
-      .then(response => response.json())
-      .then(response =>{
-          response.map((element, i) => {console.log(element)})
-      })
-      .catch(function(error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
-      })
-  
-    }
+  //Fetching previous messages
+  const getMessagesFromDb = async () => {
 
-    setMessages([
-      {
-        _id: 1,
-        text: 'Salut bébé',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ])
-  }, [])
+    apiUrl = apiMessage + idChannel
 
+    fetch(apiUrl, { 
+      method: 'GET', 
+      headers:{ Authorization: 'Bearer ' + token },
+    })
+    .then(response => response.json())
+    .then(response => {
+      let array = response.data
+      setMessages(
+        array.map(data => ({ 
+          _id : data.id_message,
+          createdAt: data.date,
+          text: data.text,
+          user: {
+            _id: data.id_user,
+            name: data.firstname + ' ' + data.lastname,
+            avatar: 'https://placeimg.com/140/140/any'
+          },
+        }))
+      )
+    }).catch(function(error) {
+      console.log('There has been a problem with your fetch operation: ' + error.message);
+    });
+  }
+
+  //Sending messages in database
+  const sendMessagesInDb =  async(text) => {
+    fetch('http://10.10.51.81:3000/api/message', {
+      method:'POST',
+      headers: { 'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+              },
+      body: JSON.stringify({
+        channel_id: idChannel,
+        text: text,
+      })
+    })
+    .then(data => data.json())
+    .then(data =>  { 
+        if(data.error) {
+          Alert.alert(data.error)
+        } else if (data.success == 1) {
+          console.log(data.message)
+        }
+    })
+    .catch(function(error) {
+      console.log('There has been a problem with your fetch operation: ' + error.message);
+    });
+  }
+
+
+  //Call fetching previous messages with layoutEffect
+  useLayoutEffect(() => {
+    getMessagesFromDb()
+  }, []);
+
+  //Call sending messages in db and then messages from db to reload the discussion
   const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-  }, [])
+    const { _id, createdAt, text, user,} = messages[0]
+    sendMessagesInDb(messages[0].text)
+    getMessagesFromDb()
+  }, []);
+  
 
   return (
-  <GiftedChat
-      messages={messages}
-      // showAvatarForEveryMessage={true}
-      onSend={messages => onSend(messages)}
-      user={{
-        _id: 1,
-      }}
-    />
-  )
+      <GiftedChat
+          messages={messages}
+          showAvatarForEveryMessage={true}
+          onSend={messages => onSend(messages)}
+          user={{
+              _id: userId,
+              name: userName,
+              avatar: 'https://placeimg.com/140/140/any'
+          }}
+      />
+  );
+
+
 }
 
 export default ChatroomScreen

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Alert, } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from "jwt-decode";
 
 //Screen to login
 const LoginScreen = (props) => {
@@ -11,7 +12,7 @@ const LoginScreen = (props) => {
   const login = async () => {
 
     console.log('coucou')
-    fetch('http://10.10.50.62:3000/api/users/login', { 
+    fetch('http://10.10.51.81:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -25,7 +26,18 @@ const LoginScreen = (props) => {
           Alert.alert(data.error)
         } else if (data.success == 1) {
           AsyncStorage.setItem('user_token', data.token)
-          props.navigation.navigate('App')
+          const decodedToken = jwt_decode(data.token)
+          props.navigation.navigate('App',{
+            screen: 'Chatrooms',
+            params: {
+              token: data.token,
+              userId: decodedToken.result.id_user,
+              userName: decodedToken.result.firstname + ' ' + decodedToken.result.lastname,
+              userEmail: decodedToken.result.email,
+              userRole: decodedToken.result.role_id,
+              userPhoto: decodedToken.result.photo
+            },
+          })
         }
       }
     ).catch(function(error) {
