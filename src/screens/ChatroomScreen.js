@@ -10,12 +10,13 @@ import jwt_decode from "jwt-decode";
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://10.10.51.81:3000/api/message/'
+  const apiMessage = 'http://10.10.58.47:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
-  const userId = props.route.params.userId
-  const userName = props.route.params.userName
+  const decodedToken = jwt_decode(token)
+  const userId = decodedToken.result.id_user
+  const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
 
   let apiUrl 
 
@@ -52,7 +53,7 @@ const ChatroomScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://10.10.51.81:3000/api/message', {
+    fetch('http://10.10.58.47:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
