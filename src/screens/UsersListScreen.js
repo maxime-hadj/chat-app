@@ -62,7 +62,7 @@ const UsersListScreen = (props) =>{
                 <Text>{item.lastname}</Text>
             </View>
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.id_user}
         />
       </ScrollView>
     );

@@ -12,28 +12,30 @@ const ChatroomsListScreen = (props) => {
   const [chatrooms, setChatrooms] = useState('');
   const [loading, setLoading] = useState(true);
 
+  console.log(props.route.params)
+
+  const userToken = props.route.params.token
+
   useEffect(() => {
       getAllChatrooms();
   }, []);
 
   const getAllChatrooms = async () =>    {
 
-      const userToken = await AsyncStorage.getItem('user_token');
-      setLoading(true);
+    setLoading(true);
 
-      fetch('http://10.10.56.231:3000/api/channel', {
-          method: 'GET',
-          headers:{ Authorization: 'Bearer ' + userToken },
-      })
-      .then(response => response.json())
-      .then(response =>{
-          console.log(response.data)
-          setChatrooms(response.data);
-          setLoading(false);
-      })
-      .catch(function(error) {
-          console.log('There has been a problem with your fetch operation: ' + error.message);
-      })
+    fetch('http://10.10.58.47:3000/api/channel', {
+        method: 'GET',
+        headers:{ Authorization: 'Bearer ' + userToken },
+    })
+    .then(response => response.json())
+    .then(response =>{
+        setChatrooms(response.data);
+        setLoading(false);
+    })
+    .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+    })
   }
 
   if (loading) {
@@ -63,12 +65,13 @@ const ChatroomsListScreen = (props) => {
                 id={item.id_channel} 
                 onPress={()=>{props.navigation.navigate('Chatroom',
                 {
-                  id_channel: item.id_channel
+                  id_channel: item.id_channel,
+                  token: props.route.params.token
                 }
                 )}}>{item.channel_name}</Text>
           </View>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id_channel}
       />
     </View>
   );

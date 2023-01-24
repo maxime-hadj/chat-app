@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import jwt_decode from "jwt-decode";
 
 //Register screen
 const RegisterScreen = (props) => {
