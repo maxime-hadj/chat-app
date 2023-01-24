@@ -11,8 +11,7 @@ const LoginScreen = (props) => {
 
   const login = async () => {
 
-    console.log('coucou')
-    fetch('http://10.10.51.81:3000/api/users/login', { 
+    fetch('http://10.10.58.47:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
