@@ -8,11 +8,10 @@ import jwt_decode from "jwt-decode";
 const LoginScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+ 
   const login = async () => {
 
-    console.log('coucou')
-    fetch('http://10.10.51.81:3000/api/users/login', { 
+    fetch('http://10.10.58.47:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -25,17 +24,11 @@ const LoginScreen = (props) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.success == 1) {
-          AsyncStorage.setItem('user_token', data.token)
           const decodedToken = jwt_decode(data.token)
           props.navigation.navigate('App',{
             screen: 'Chatrooms',
             params: {
               token: data.token,
-              userId: decodedToken.result.id_user,
-              userName: decodedToken.result.firstname + ' ' + decodedToken.result.lastname,
-              userEmail: decodedToken.result.email,
-              userRole: decodedToken.result.role_id,
-              userPhoto: decodedToken.result.photo
             },
           })
         }

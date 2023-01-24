@@ -12,16 +12,19 @@ const ChatroomsListScreen = (props) => {
   const [chatrooms, setChatrooms] = useState('');
   const [loading, setLoading] = useState(true);
 
+  console.log(props.route.params)
+
+  const userToken = props.route.params.token
+
   useEffect(() => {
       getAllChatrooms();
   }, []);
 
   const getAllChatrooms = async () =>    {
 
-    const userToken = await AsyncStorage.getItem('user_token');
     setLoading(true);
 
-    fetch('http://10.10.51.81:3000/api/channel', {
+    fetch('http://10.10.58.47:3000/api/channel', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })
@@ -63,11 +66,7 @@ const ChatroomsListScreen = (props) => {
                 onPress={()=>{props.navigation.navigate('Chatroom',
                 {
                   id_channel: item.id_channel,
-                  token: props.route.params.token,
-                  userId: props.route.params.userId,
-                  userName: props.route.params.userName,
-                  userEmail: props.route.params.userEmail,
-                  userRole: props.route.params.userRole
+                  token: props.route.params.token
                 }
                 )}}>{item.channel_name}</Text>
           </View>
