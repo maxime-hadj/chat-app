@@ -19,7 +19,7 @@ const UsersListScreen = (props) =>{
 
         const userToken = await AsyncStorage.getItem('user_token');
         setLoading(true);
-        fetch('http://10.10.59.176:3000/api/users', {
+        fetch('http://10.10.60.177:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })
@@ -57,9 +57,11 @@ const UsersListScreen = (props) =>{
             data={users}
             renderItem={({ item }) => (
             <View>
-                <Text>{item.email}</Text>
-                <Text>{item.firstname}</Text>
-                <Text>{item.lastname}</Text>
+                <Text onPress={()=>{props.navigation.navigate('Profile',
+                {
+                  id_user: item.id_user,
+                }
+                )}}>{item.firstname} {item.lastname}</Text>
             </View>
             )}
             keyExtractor={item => item.id_user}
