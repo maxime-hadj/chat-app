@@ -19,7 +19,7 @@ const UsersListScreen = (props) =>{
 
         const userToken = await AsyncStorage.getItem('user_token');
         setLoading(true);
-        fetch('http://10.10.60.177:3000/api/users', {
+        fetch('http://10.10.59.176:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })
@@ -40,32 +40,42 @@ const UsersListScreen = (props) =>{
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        paddingTop: StatusBar.currentHeight,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
       },
-      scrollView: {
-        marginHorizontal: 20,
+      userContainer: {
+        margin: 10,
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor: '#d3d3d3',
       },
-      text: {
-        fontSize: 42,
+      userName: {
+        fontSize: 18,
       },
     });
 
     return (
-      <View>
-        <FlatList
-            data={users}
-            renderItem={({ item }) => (
-            <View>
-                <Text onPress={()=>{props.navigation.navigate('Profile',
-                {
-                  id_user: item.id_user,
-                }
-                )}}>{item.firstname} {item.lastname}</Text>
-            </View>
-            )}
-            keyExtractor={item => item.id_user}
-        />
-      </View>
+  <View style={styles.container}>
+    <FlatList
+      data={users}
+      renderItem={({ item }) => (
+        <View style={styles.userContainer}>
+          <Text 
+            style={styles.userName}
+            onPress={() => {
+              props.navigation.navigate('Profile', {
+                id_user: item.id_user,
+              });
+            }}
+          >
+            {item.firstname} {item.lastname}
+          </Text>
+        </View>
+      )}
+      keyExtractor={item => item.id_user}
+    />
+  </View>
     );
 
 
