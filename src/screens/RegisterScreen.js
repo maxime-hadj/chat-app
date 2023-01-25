@@ -17,7 +17,7 @@ const RegisterScreen = (props) => {
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
-      fetch('http://10.10.56.231:3000/api/users', { 
+      fetch('http://10.10.59.176:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({

@@ -19,7 +19,7 @@ const UsersListScreen = (props) =>{
 
         const userToken = await AsyncStorage.getItem('user_token');
         setLoading(true);
-        fetch('http://10.10.56.231:3000/api/users', {
+        fetch('http://10.10.59.176:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })
@@ -52,7 +52,7 @@ const UsersListScreen = (props) =>{
     });
 
     return (
-      <ScrollView >
+      <View>
         <FlatList
             data={users}
             renderItem={({ item }) => (
@@ -64,7 +64,7 @@ const UsersListScreen = (props) =>{
             )}
             keyExtractor={item => item.id_user}
         />
-      </ScrollView>
+      </View>
     );
 
 
