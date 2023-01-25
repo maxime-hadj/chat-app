@@ -20,7 +20,7 @@ const update = async () =>{
     alert.alert("Your passwords doesn't match.")
   } else {
     const userToken = await AsyncStorage.getItem('user_token');
-    fetch('http://10.10.50.62:3000/api/users', { 
+    fetch('http://10.10.59.176:3000/api/users', { 
       method: 'PATCH',
       headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken},
       body: JSON.stringify({

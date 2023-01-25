@@ -11,7 +11,7 @@ const LoginScreen = (props) => {
  
   const login = async () => {
 
-    fetch('http://10.10.58.47:3000/api/users/login', { 
+    fetch('http://10.10.60.177:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -25,6 +25,7 @@ const LoginScreen = (props) => {
           Alert.alert(data.error)
         } else if (data.success == 1) {
           const decodedToken = jwt_decode(data.token)
+          AsyncStorage.setItem('user_token', data.token);
           props.navigation.navigate('App',{
             screen: 'Chatrooms',
             params: {

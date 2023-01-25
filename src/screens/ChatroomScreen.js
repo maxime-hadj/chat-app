@@ -10,7 +10,7 @@ import jwt_decode from "jwt-decode";
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://10.10.58.47:3000/api/message/'
+  const apiMessage = 'http://10.10.59.176:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
