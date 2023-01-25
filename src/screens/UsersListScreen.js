@@ -26,7 +26,6 @@ const UsersListScreen = (props) =>{
         .then(response => response.json())
         .then(response =>{
             setUsers(response.data);
-            console.log(response.data);
             setLoading(false);
         })
         .catch(function(error) {

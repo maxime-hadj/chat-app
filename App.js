@@ -32,7 +32,7 @@ function AppStackScreen() {
   return (
     <AppStack.Navigator>
       <AppStack.Screen name="Private Chats" component={PrivateChatsListScreen} options={{ tabBarLabel: 'Private Chat List' }} />
-      <AppStack.Screen name="PrivateChat" component={PrivateChatScreen} options={{ tabBarLabel: 'Private Chat' }} />
+      <AppStack.Screen name="Private Chat" component={PrivateChatScreen} options={{ tabBarLabel: 'Private Chat' }} />
       <AppStack.Screen name="Chatrooms" component={ChatroomsListScreen} options={{ tabBarLabel: 'Chatrooms' }}  />
       <AppStack.Screen name="Chatroom" component={ChatroomScreen} options={{ tabBarLabel: 'Chatroom' }} />
       <AppStack.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: 'Profile' }} />

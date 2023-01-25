@@ -7,6 +7,8 @@ import { Input, Button } from 'react-native-elements';
 // Si on clique sur le nom de l'utilisateur, on peut voir son profil (écran à créer)
 
 const PrivateChatScreen = (props) => {
+
+  console.log(props.route.params)
     
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>

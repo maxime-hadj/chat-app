@@ -11,9 +11,11 @@ const ProfileScreen = (props) => {
 
   const [user, setUser] = useState('');
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState('')
 
   const idUser = props.route.params.id_user
-  console.log(idUser)
+  const apiUrl = 'http://10.10.60.177:3000/api/users/'
+  const fetchUrl = apiUrl + idUser
 
   useEffect(() =>{
     getUser();
@@ -21,8 +23,9 @@ const ProfileScreen = (props) => {
 
   const getUser = async () => {
     const userToken = await AsyncStorage.getItem('user_token');
+    setToken(userToken)
     setLoading(true);
-    fetch('http://10.10.60.177:3000/api/users/22', {
+    fetch(fetchUrl, {
       method: 'GET',
       headers: {Authorization: 'Bearer ' + userToken},
     })
@@ -30,7 +33,6 @@ const ProfileScreen = (props) => {
     .then(response =>{
       setUser(response.data);
       setLoading(false);
-      console.log(user)
     })
     .catch(function(error){
       Alert.alert("Error", "There has been a problem with your fetch operation: " + error.message);
@@ -56,6 +58,14 @@ const ProfileScreen = (props) => {
     <View>
       <Text>Name: {user.firstname} {user.lastname}</Text>
       <Text>Email: {user.email}</Text>
+      <Button title='Discuss' onPress={()=> props.navigation.navigate('App', {
+        screen: 'Private Chat', 
+        params: {
+          idUserTarget: user.id_user,
+          token: token
+        }
+      })} />
+
     </View>
   )
 };
