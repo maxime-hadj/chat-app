@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import { Input, Button } from 'react-native-elements';
@@ -14,6 +14,14 @@ const UpdateProfileScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
 
 const update = async () =>{
 
@@ -50,6 +58,25 @@ const update = async () =>{
   })
   }
 }
+
+const saveDarkMode = async (value) => {
+  try {
+    await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const retrieveDarkMode = async () => {
+  try {
+    const value = await AsyncStorage.getItem('darkMode');
+    if (value !== null) {
+      return JSON.parse(value);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -89,7 +116,7 @@ const styles = StyleSheet.create({
 });
 
   return (
-  <ScrollView>
+  //<ScrollView>
       <View style={styles.container} >
     <Input
       placeholder='Enter your First Name'
@@ -144,7 +171,7 @@ const styles = StyleSheet.create({
         Chat here !
       </Text>
   </View>
-  </ScrollView>
+  //</ScrollView>
   )
 };
 

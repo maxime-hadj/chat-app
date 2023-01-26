@@ -22,6 +22,14 @@ const ChatroomScreen = (props) => {
 
   const [messages, setMessages] = useState([]);
 
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
   //Fetching previous messages
   const getMessagesFromDb = async () => {
 
@@ -89,6 +97,23 @@ const ChatroomScreen = (props) => {
     getMessagesFromDb()
   }, []);
   
+  const saveDarkMode = async (value) => {
+    try {
+      await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const retrieveDarkMode = async () => {
+    try {
+      const value = await AsyncStorage.getItem('darkMode');
+      if (value !== null) {
+        return JSON.parse(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
       <GiftedChat

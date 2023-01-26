@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Alert, } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,15 @@ import jwt_decode from "jwt-decode";
 const LoginScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+
+useEffect(() => {
+  retrieveDarkMode().then(value => {
+    setDarkMode(value);
+  });
+}, []);
+
+  
  
   const login = async () => {
 
@@ -38,12 +47,33 @@ const LoginScreen = (props) => {
       console.log('There has been a problem with your fetch operation: ' + error.message);
     });
   }
+
+  const saveDarkMode = async (value) => {
+    try {
+      await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  const retrieveDarkMode = async () => {
+    try {
+      const value = await AsyncStorage.getItem('darkMode');
+      if (value !== null) {
+        return JSON.parse(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#F5FCFF',
+      backgroundColor: darkMode ? 'black' : 'white',
     },
     input: {
       width: '80%',
@@ -73,6 +103,12 @@ const LoginScreen = (props) => {
       color: '#0064e1',
       textAlign: 'center',
     },
+    DarkBtn: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: darkMode ? 'black' : 'white',
+    },
   });
     
   return (
@@ -99,6 +135,19 @@ const LoginScreen = (props) => {
     <Text onPress={()=>{props.navigation.navigate('Register')}} style={styles.registerText}>
       Not registered ? Sign up here !
     </Text>
+
+    <Button 
+  title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
+  onPress={() => {
+    setDarkMode(!darkMode);
+    saveDarkMode(!darkMode);
+  }} 
+  buttonStyle={{
+    backgroundColor: darkMode ? 'green' : 'blue',
+    borderRadius: 50,
+    padding: 10,
+  }}
+/>
 </View>
   )
 };

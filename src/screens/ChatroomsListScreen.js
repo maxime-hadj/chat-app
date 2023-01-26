@@ -20,6 +20,14 @@ const ChatroomsListScreen = (props) => {
       getAllChatrooms();
   }, []);
 
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
   const getAllChatrooms = async () =>    {
 
     setLoading(true);
@@ -38,6 +46,25 @@ const ChatroomsListScreen = (props) => {
     })
   }
 
+  const saveDarkMode = async (value) => {
+    try {
+      await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  const retrieveDarkMode = async () => {
+    try {
+      const value = await AsyncStorage.getItem('darkMode');
+      if (value !== null) {
+        return JSON.parse(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   if (loading) {
       return <Text>Loading...</Text>
   }
@@ -47,7 +74,7 @@ const ChatroomsListScreen = (props) => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#F5FCFF',
+      backgroundColor: darkMode ? 'black' : 'white',
     },
     chatroomContainer: {
       margin: 10,
@@ -58,10 +85,17 @@ const ChatroomsListScreen = (props) => {
     chatroomName: {
       fontSize: 18,
     },
+    DarkBtn: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: darkMode ? 'black' : 'white',
+    },
   });
 
   return (
-<ScrollView>
+//<ScrollView>
+<View>
   <FlatList
     data={chatrooms}
     renderItem={({ item }) => (
@@ -81,7 +115,20 @@ const ChatroomsListScreen = (props) => {
     )}
     keyExtractor={item => item.id_channel}
   />
-</ScrollView>
+      <Button 
+  title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
+  onPress={() => {
+    setDarkMode(!darkMode);
+    saveDarkMode(!darkMode);
+  }} 
+  buttonStyle={{
+    backgroundColor: darkMode ? 'green' : 'blue',
+    borderRadius: 50,
+    padding: 10,
+  }}
+/>
+  </View>
+//</ScrollView>
   );
 
 };
