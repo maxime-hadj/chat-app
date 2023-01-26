@@ -12,8 +12,6 @@ const ChatroomsListScreen = (props) => {
   const [chatrooms, setChatrooms] = useState('');
   const [loading, setLoading] = useState(true);
 
-  console.log(props.route.params)
-
   const userToken = props.route.params.token
 
   useEffect(() => {
@@ -24,7 +22,7 @@ const ChatroomsListScreen = (props) => {
 
     setLoading(true);
 
-    fetch('http://10.10.59.176:3000/api/channel', {
+    fetch('http://10.10.63.34:3000/api/channel', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })

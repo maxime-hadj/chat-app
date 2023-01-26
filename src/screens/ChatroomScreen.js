@@ -3,6 +3,10 @@ import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import jwt_decode from "jwt-decode";
+import socketIO from 'socket.io-client';
+
+
+const socket = socketIO.connect('http://10.10.63.34:3000')
 
 // Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
 // Si on clique sur le nom du channel qui sera en haut de la page, 
@@ -10,7 +14,9 @@ import jwt_decode from "jwt-decode";
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://10.10.59.176:3000/api/message/'
+  console.log(props)
+
+  const apiMessage = 'http://10.10.63.34:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
@@ -53,7 +59,7 @@ const ChatroomScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://10.10.58.47:3000/api/message', {
+    fetch('http://10.10.63.34:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -68,7 +74,12 @@ const ChatroomScreen = (props) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.success == 1) {
-          console.log(data.message)
+          socket.emit('message', {
+            text: text,
+            name: userName,
+            id: '${socket.id}${Math.random()}',
+            socketID: socket.id
+          })
         }
     })
     .catch(function(error) {
@@ -79,14 +90,14 @@ const ChatroomScreen = (props) => {
 
   //Call fetching previous messages with layoutEffect
   useLayoutEffect(() => {
+    socket.on('messageResponse', (data) => setMessages([...messages, data]));
     getMessagesFromDb()
-  }, []);
+  }, [socket, messages]);
 
   //Call sending messages in db and then messages from db to reload the discussion
   const onSend = useCallback((messages = []) => {
     const { _id, createdAt, text, user,} = messages[0]
     sendMessagesInDb(messages[0].text)
-    getMessagesFromDb()
   }, []);
   
 

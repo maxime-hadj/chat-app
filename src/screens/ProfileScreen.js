@@ -40,7 +40,7 @@ const ProfileScreen = (props) => {
       console.log(props.route.params)
     }
 
-    const apiUrl = 'http://10.10.59.176:3000/api/users/'
+    const apiUrl = 'http://10.10.63.34:3000/api/users/'
     const fetchUrl = apiUrl + idUser
 
     fetch(fetchUrl, {

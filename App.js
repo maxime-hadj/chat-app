@@ -22,7 +22,7 @@ const AppStack = createBottomTabNavigator();
 function AuthStackScreen() {
   return (
     <AuthStack.Navigator>
-      <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
       <AuthStack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
     </AuthStack.Navigator>
   );
@@ -48,7 +48,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Auth">
         <Stack.Screen name="Auth" component={AuthStackScreen} />
-        <Stack.Screen name="App" component={AppStackScreen} />
+        <Stack.Screen name="App" component={AppStackScreen}  />
       </Stack.Navigator>
     </NavigationContainer>
   );
