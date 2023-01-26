@@ -17,7 +17,7 @@ const RegisterScreen = (props) => {
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
-      fetch('http://10.10.63.34:3000/api/users', { 
+      fetch('http://10.10.59.176:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -44,11 +44,31 @@ const RegisterScreen = (props) => {
     }
   }
 
- 
+  const styles = {
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
+    },
+    inputContainer: {
+      margin: 20,
+      width: '90%',
+    },
+    buttonContainer: {
+      margin: 20,
+      width: '90%',
+    },
+    text: {
+      fontSize: 15,
+      textAlign: 'center',
+      margin: 10,
+    },
+  };
   
   return (
-
-    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+    <View>
+    <View style={styles.inputContainer}>
       <Input
         placeholder='Enter your First Name'
         label='First Name'
@@ -92,12 +112,16 @@ const RegisterScreen = (props) => {
         id={password_validation}
         secureTextEntry
       />
-      
-      <Button title='Register' onPress={()=> register()} />
-        <Text onPress={()=>{props.navigation.navigate('Login')}} style={{ fontSize: 15 }}>
-          Got an account ? Login here !
-        </Text>
     </View>
+      <View style={styles.buttonContainer}>
+      <Button title='Register' onPress={()=> register()} />
+    </View>
+    <View>
+      <Text onPress={()=>{props.navigation.navigate('Login')}} style={styles.text}>
+        Got an account ? Login here !
+      </Text>
+    </View>
+  </View>
   )
 }
 

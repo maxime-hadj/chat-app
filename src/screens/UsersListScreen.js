@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +19,7 @@ const UsersListScreen = (props) =>{
 
         const userToken = await AsyncStorage.getItem('user_token');
         setLoading(true);
-        fetch('http://10.10.63.34:3000/api/users', {
+        fetch('http://10.10.62.63:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })

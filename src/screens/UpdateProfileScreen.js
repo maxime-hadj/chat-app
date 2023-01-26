@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
+import { Image, FlatList } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -14,13 +15,21 @@ const UpdateProfileScreen = (props) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
 const update = async () =>{
 
   if(password != password_validation){
     alert.alert("Your passwords doesn't match.")
   } else {
     const userToken = await AsyncStorage.getItem('user_token');
-    fetch('http://10.10.63.34:3000/api/users', { 
+    fetch('http://10.10.62.63:3000/api/users', { 
       method: 'PATCH',
       headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken},
       body: JSON.stringify({
@@ -49,6 +58,25 @@ const update = async () =>{
   })
   }
 }
+
+const saveDarkMode = async (value) => {
+  try {
+    await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const retrieveDarkMode = async () => {
+  try {
+    const value = await AsyncStorage.getItem('darkMode');
+    if (value !== null) {
+      return JSON.parse(value);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -88,61 +116,62 @@ const styles = StyleSheet.create({
 });
 
   return (
-
-    <View style={styles.container} >
-  <Input
-    placeholder='Enter your First Name'
-    label='First Name'
-    leftIcon={{ type: 'material', name:'face'}}
-    value={firstname}
-    onChangeText={text => setFirstname(text)}
-    id={firstname}
-    style={styles.input}
-  /> 
-  <Input
-    placeholder='Enter your Last Name'
-    label='Last Name'
-    leftIcon={{ type: 'material', name:'face'}}
-    value={lastname}
-    onChangeText={text => setLastname(text)}
-    id={lastname}
-    style={styles.input}
-  />
-  <Input
-    placeholder='Enter your Email'
-    label='Email'
-    leftIcon={{ type: 'material', name:'email'}}
-    value={email}
-    onChangeText={text => setEmail(text)}
-    id={email}
-    style={styles.input}
-  /> 
-  <Input
-    placeholder='Enter your Password'
-    label='Password'
-    leftIcon={{ type: 'material', name:'lock'}}
-    value={password}
-    onChangeText={text => setPassword(text)}
-    id={password}
-    secureTextEntry
-    style={styles.input}
-  />
-  <Input
-    placeholder='Confirm your Password'
-    label='Password validation'
-    leftIcon={{ type: 'material', name:'lock'}}
-    value={password_validation}
-    onChangeText={text => setPasswordValidation(text)}
-    id={password_validation}
-    secureTextEntry
-    style={styles.input}
-  />
-  
-  <Button title='update' onPress={()=> update()} style={styles.button} buttonStyle={styles.buttonText} />
-    <Text onPress={()=>{navigation.navigate('Chat')}} style={styles.registerText}>
-      Chat here !
-    </Text>
-</View>
+  //<ScrollView>
+      <View style={styles.container} >
+    <Input
+      placeholder='Enter your First Name'
+      label='First Name'
+      leftIcon={{ type: 'material', name:'face'}}
+      value={firstname}
+      onChangeText={text => setFirstname(text)}
+      id={firstname}
+      style={styles.input}
+    /> 
+    <Input
+      placeholder='Enter your Last Name'
+      label='Last Name'
+      leftIcon={{ type: 'material', name:'face'}}
+      value={lastname}
+      onChangeText={text => setLastname(text)}
+      id={lastname}
+      style={styles.input}
+    />
+    <Input
+      placeholder='Enter your Email'
+      label='Email'
+      leftIcon={{ type: 'material', name:'email'}}
+      value={email}
+      onChangeText={text => setEmail(text)}
+      id={email}
+      style={styles.input}
+    /> 
+    <Input
+      placeholder='Enter your Password'
+      label='Password'
+      leftIcon={{ type: 'material', name:'lock'}}
+      value={password}
+      onChangeText={text => setPassword(text)}
+      id={password}
+      secureTextEntry
+      style={styles.input}
+    />
+    <Input
+      placeholder='Confirm your Password'
+      label='Password validation'
+      leftIcon={{ type: 'material', name:'lock'}}
+      value={password_validation}
+      onChangeText={text => setPasswordValidation(text)}
+      id={password_validation}
+      secureTextEntry
+      style={styles.input}
+    />
+    
+    <Button title='update' onPress={()=> update()} style={styles.button} buttonStyle={styles.buttonText} />
+      <Text onPress={()=>{navigation.navigate('Chat')}} style={styles.registerText}>
+        Chat here !
+      </Text>
+  </View>
+  //</ScrollView>
   )
 };
 

@@ -18,11 +18,19 @@ const ChatroomsListScreen = (props) => {
       getAllChatrooms();
   }, []);
 
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
   const getAllChatrooms = async () =>    {
 
     setLoading(true);
 
-    fetch('http://10.10.63.34:3000/api/channel', {
+    fetch('http://10.10.62.63:3000/api/channel', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })
@@ -36,6 +44,25 @@ const ChatroomsListScreen = (props) => {
     })
   }
 
+  const saveDarkMode = async (value) => {
+    try {
+      await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  const retrieveDarkMode = async () => {
+    try {
+      const value = await AsyncStorage.getItem('darkMode');
+      if (value !== null) {
+        return JSON.parse(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   if (loading) {
       return <Text>Loading...</Text>
   }
@@ -43,35 +70,63 @@ const ChatroomsListScreen = (props) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: StatusBar.currentHeight,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: darkMode ? 'black' : 'white',
     },
-    scrollView: {
-      marginHorizontal: 20,
+    chatroomContainer: {
+      margin: 10,
+      padding: 10,
+      borderBottomWidth: 1,
+      borderColor: '#d3d3d3',
     },
-    text: {
-      fontSize: 42,
+    chatroomName: {
+      fontSize: 18,
+    },
+    DarkBtn: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: darkMode ? 'black' : 'white',
     },
   });
 
   return (
-    <View >
-      <FlatList
-          data={chatrooms}
-          renderItem={({ item }) => (
-          <View>
-              <Text 
-                id={item.id_channel} 
-                onPress={()=>{props.navigation.navigate('Chatroom',
-                {
-                  id_channel: item.id_channel,
-                  token: props.route.params.token
-                }
-                )}}>{item.channel_name}</Text>
-          </View>
-          )}
-          keyExtractor={item => item.id_channel}
-      />
-    </View>
+//<ScrollView>
+<View>
+  <FlatList
+    data={chatrooms}
+    renderItem={({ item }) => (
+      <View style={styles.chatroomContainer}>
+        <Text 
+          style={styles.chatroomName}
+          onPress={() => {
+            props.navigation.navigate('Chatroom', {
+              id_channel: item.id_channel,
+              token: props.route.params.token
+            });
+          }}
+        >
+          {item.channel_name}
+        </Text>
+      </View>
+    )}
+    keyExtractor={item => item.id_channel}
+  />
+      <Button 
+  title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
+  onPress={() => {
+    setDarkMode(!darkMode);
+    saveDarkMode(!darkMode);
+  }} 
+  buttonStyle={{
+    backgroundColor: darkMode ? 'green' : 'blue',
+    borderRadius: 50,
+    padding: 10,
+  }}
+/>
+  </View>
+//</ScrollView>
   );
 
 };

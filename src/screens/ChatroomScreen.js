@@ -14,9 +14,7 @@ const socket = socketIO.connect('http://10.10.63.34:3000')
 
 const ChatroomScreen = (props) => {
 
-  console.log(props)
-
-  const apiMessage = 'http://10.10.63.34:3000/api/message/'
+  const apiMessage = 'http://10.10.62.63:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
@@ -27,6 +25,14 @@ const ChatroomScreen = (props) => {
   let apiUrl 
 
   const [messages, setMessages] = useState([]);
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
 
   //Fetching previous messages
   const getMessagesFromDb = async () => {
@@ -100,6 +106,23 @@ const ChatroomScreen = (props) => {
     sendMessagesInDb(messages[0].text)
   }, []);
   
+  const saveDarkMode = async (value) => {
+    try {
+      await AsyncStorage.setItem('darkMode', JSON.stringify(value));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const retrieveDarkMode = async () => {
+    try {
+      const value = await AsyncStorage.getItem('darkMode');
+      if (value !== null) {
+        return JSON.parse(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
       <GiftedChat

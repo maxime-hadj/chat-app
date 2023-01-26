@@ -40,7 +40,7 @@ const ProfileScreen = (props) => {
       console.log(props.route.params)
     }
 
-    const apiUrl = 'http://10.10.63.34:3000/api/users/'
+    const apiUrl = 'http://10.10.62.63:3000/api/users/'
     const fetchUrl = apiUrl + idUser
 
     fetch(fetchUrl, {
@@ -74,36 +74,56 @@ const ProfileScreen = (props) => {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      paddingTop: StatusBar.currentHeight,
+        flex: 1,
+        paddingTop: StatusBar.currentHeight,
+        backgroundColor: '#f5f5f5'
     },
     text: {
-      fontSize: 42,
+        fontSize: 18,
+        color: '#333',
+        marginBottom: 10
     },
-  });
+    button: {
+        backgroundColor: '#4285f4',
+        padding: 10,
+        alignSelf: 'center'
+    }
+});
 
 
   return (
-    <View>
-      <Text>Name: {user.firstname} {user.lastname}</Text>
-      <Text>Email: {user.email}</Text>
-      { isCurrentUser === false ? 
-      <Button title='Discuss' onPress={()=> props.navigation.navigate('App', {
-        screen: 'Private Chat', 
-        params: {
-          idUserTarget: user.id_user,
-          token: token
-        }
-      })} />
-      : <Button title='Edit' onPress={()=> props.navigation.navigate('App', {
-        screen: 'Update Profile', 
-        params: {
-          token: token
-        }
-      })} />}
-      
-
-    </View>
+    <View style={styles.container}>
+    <Text style={styles.text}>Name: {user.firstname} {user.lastname}</Text>
+    <Text style={styles.text}>Email: {user.email}</Text>
+    {isCurrentUser === false ? (
+        <Button
+            title="Discuss"
+            onPress={() =>
+                props.navigation.navigate('App', {
+                    screen: 'Private Chat',
+                    params: {
+                        idUserTarget: user.id_user,
+                        token: token
+                    }
+                })
+            }
+            buttonStyle={styles.button}
+        />
+    ) : (
+        <Button
+            title="Edit"
+            onPress={() =>
+                props.navigation.navigate('App', {
+                    screen: 'Update Profile',
+                    params: {
+                        token: token
+                    }
+                })
+            }
+            buttonStyle={styles.button}
+        />
+    )}
+</View>
   )
 };
 
