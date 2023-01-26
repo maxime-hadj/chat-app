@@ -14,7 +14,7 @@ const socket = socketIO.connect('http://10.10.63.34:3000')
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://10.10.62.63:3000/api/message/'
+  const apiMessage = 'http://10.10.63.34:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
@@ -27,12 +27,6 @@ const ChatroomScreen = (props) => {
   const [messages, setMessages] = useState([]);
 
   const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    retrieveDarkMode().then(value => {
-      setDarkMode(value);
-    });
-  }, []);
 
   //Fetching previous messages
   const getMessagesFromDb = async () => {
@@ -98,6 +92,9 @@ const ChatroomScreen = (props) => {
   useLayoutEffect(() => {
     socket.on('messageResponse', (data) => setMessages([...messages, data]));
     getMessagesFromDb()
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
   }, [socket, messages]);
 
   //Call sending messages in db and then messages from db to reload the discussion
