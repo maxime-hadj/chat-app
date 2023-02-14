@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import jwt_decode from "jwt-decode";
@@ -11,13 +11,19 @@ const RegisterScreen = (props) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
 
   const register = () => {
 
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
-      fetch('http://10.10.59.176:3000/api/users', { 
+      fetch('http://10.10.22.129:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -50,6 +56,8 @@ const RegisterScreen = (props) => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#F5FCFF',
+      backgroundColor: darkMode ? 'black' : 'white',
+      color: darkMode ? 'white' : 'black'
     },
     inputContainer: {
       margin: 20,
@@ -63,6 +71,7 @@ const RegisterScreen = (props) => {
       fontSize: 15,
       textAlign: 'center',
       margin: 10,
+      color: darkMode ? 'white' : 'white'
     },
   };
   

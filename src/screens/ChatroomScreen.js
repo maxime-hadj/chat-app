@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import socketIO from 'socket.io-client';
 
 
-const socket = socketIO.connect('http://10.10.63.34:3000')
+const socket = socketIO.connect('http://10.10.22.129:3000')
 
 // Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
 // Si on clique sur le nom du channel qui sera en haut de la page, 
@@ -14,7 +14,13 @@ const socket = socketIO.connect('http://10.10.63.34:3000')
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://10.10.63.34:3000/api/message/'
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
+  const apiMessage = 'http://10.10.22.129:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token

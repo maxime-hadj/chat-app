@@ -9,6 +9,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatroomsListScreen = (props) => {
 
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
   const [chatrooms, setChatrooms] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -72,7 +78,9 @@ const ChatroomsListScreen = (props) => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: '#F5FCFF',
       backgroundColor: darkMode ? 'black' : 'white',
+      color: darkMode ? 'white' : 'black'
     },
     chatroomContainer: {
       margin: 10,

@@ -8,6 +8,7 @@ import { Input, Button } from 'react-native-elements';
 
 const PrivateChatScreen = (props) => {
 
+
   console.log(props.route.params)
     
   return (

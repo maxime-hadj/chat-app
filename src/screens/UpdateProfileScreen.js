@@ -9,6 +9,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UpdateProfileScreen = (props) => {
 
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
+
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
@@ -29,7 +35,7 @@ const update = async () =>{
     alert.alert("Your passwords doesn't match.")
   } else {
     const userToken = await AsyncStorage.getItem('user_token');
-    fetch('http://10.10.62.63:3000/api/users', { 
+    fetch('http://10.10.22.129:3000/api/users', { 
       method: 'PATCH',
       headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken},
       body: JSON.stringify({
@@ -84,6 +90,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    backgroundColor: darkMode ? 'black' : 'white',
+    
   },
   input: {
     width: '80%',
@@ -93,6 +101,7 @@ const styles = StyleSheet.create({
     borderColor: '#d3d3d3',
     borderWidth: 1,
     borderRadius: 5,
+    color: darkMode ? 'white' : 'white'
   },
   button: {
     margin: 10,

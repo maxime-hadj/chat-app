@@ -20,7 +20,7 @@ useEffect(() => {
  
   const login = async () => {
 
-    fetch('http://10.10.63.34:3000/api/users/login', { 
+    fetch('http://10.10.22.129:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -74,6 +74,7 @@ useEffect(() => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: darkMode ? 'black' : 'white',
+      //color: darkMode ? 'white' : 'white'
     },
     input: {
       width: '80%',
@@ -83,6 +84,7 @@ useEffect(() => {
       borderColor: '#d3d3d3',
       borderWidth: 1,
       borderRadius: 5,
+      color: darkMode ? 'white' : 'white'
     },
     button: {
       margin: 10,

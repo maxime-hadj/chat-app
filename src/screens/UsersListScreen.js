@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Si on clique sur un User on est envoyé vers la conversation privée avec ce user donc l'écran PrivateChatScreen
 
 const UsersListScreen = (props) =>{
+
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
     
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -19,7 +25,7 @@ const UsersListScreen = (props) =>{
 
         const userToken = await AsyncStorage.getItem('user_token');
         setLoading(true);
-        fetch('http://10.10.62.63:3000/api/users', {
+        fetch('http://10.10.22.129:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })
@@ -52,6 +58,16 @@ const UsersListScreen = (props) =>{
       },
       userName: {
         fontSize: 18,
+      },
+      input: {
+        width: '80%',
+        margin: 10,
+        padding: 15,
+        fontSize: 16,
+        borderColor: '#d3d3d3',
+        borderWidth: 1,
+        borderRadius: 5,
+        color: darkMode ? 'white' : 'white'
       },
     });
 

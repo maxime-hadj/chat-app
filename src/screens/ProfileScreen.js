@@ -22,6 +22,12 @@ const ProfileScreen = (props) => {
 
   const getUser = async () => {
 
+    useEffect(() => {
+      retrieveDarkMode().then(value => {
+        setDarkMode(value);
+      });
+    }, []);
+
     const userToken = await AsyncStorage.getItem('user_token');
     const decodedToken = jwt_decode(userToken);
 
@@ -40,7 +46,7 @@ const ProfileScreen = (props) => {
       console.log(props.route.params)
     }
 
-    const apiUrl = 'http://10.10.62.63:3000/api/users/'
+    const apiUrl = 'http://10.10.22.129:3000/api/users/'
     const fetchUrl = apiUrl + idUser
 
     fetch(fetchUrl, {
@@ -76,12 +82,15 @@ const ProfileScreen = (props) => {
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
-        backgroundColor: '#f5f5f5'
+        backgroundColor: '#f5f5f5',
+        backgroundColor: darkMode ? 'black' : 'white',
+        color: darkMode ? 'white' : 'black'
     },
     text: {
         fontSize: 18,
         color: '#333',
-        marginBottom: 10
+        marginBottom: 10,
+        color: darkMode ? 'white' : 'white'
     },
     button: {
         backgroundColor: '#4285f4',

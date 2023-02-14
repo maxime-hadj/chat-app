@@ -6,6 +6,8 @@ import { Input, Button } from 'react-native-elements';
 // Quand on clique sur un des éléments, on est envoyé vers la conversation privée ( donc PrivateChatScreen)
 
 const PrivateChatsListScreen = (props) => {
+
+
   return (
     <>
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
