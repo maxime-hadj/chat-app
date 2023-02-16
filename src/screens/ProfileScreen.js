@@ -40,7 +40,7 @@ const ProfileScreen = (props) => {
       console.log(props.route.params)
     }
 
-    const apiUrl = 'http://10.10.62.63:3000/api/users/'
+    const apiUrl = 'http://10.10.0.136:3000/api/users/'
     const fetchUrl = apiUrl + idUser
 
     fetch(fetchUrl, {
@@ -102,8 +102,8 @@ const ProfileScreen = (props) => {
                 props.navigation.navigate('App', {
                     screen: 'Private Chat',
                     params: {
-                        idUserTarget: user.id_user,
-                        token: token
+                      id_user: user.id_user,
+                      token: token
                     }
                 })
             }
