@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Alert, ScrollView, StyleSheet, StatusBar, FlatList } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Header from '../component/header';
 
 // Ecran ChatroomsListScreen => écran avec liste des channels
 // Si on clique sur un channel, on est envoyé sur le channel en question 

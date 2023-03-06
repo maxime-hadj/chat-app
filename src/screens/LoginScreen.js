@@ -3,6 +3,8 @@ import { View, StyleSheet, Text, Alert, } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Header from '../component/header';
 
 //Screen to login
 const LoginScreen = (props) => {
@@ -111,46 +113,64 @@ useEffect(() => {
       alignItems: 'center',
       backgroundColor: darkMode ? 'black' : 'white',
     },
+    header: {
+      position: 'fixed',
+      top: 0,
+      width: '100%',
+      zIndex: 1,
+    },
   });
     
   return (
-<View style={styles.container} >
-  <Input
-    placeholder='Enter your Email'
-    label='Email'
-    leftIcon={{ type: 'material', name:'email'}}
-    value={email}
-    onChangeText={text => setEmail(text)}
-    style={styles.input}
-  /> 
-  <Input
-    placeholder='Enter your Password'
-    label='Password'
-    leftIcon={{ type: 'material', name:'lock'}}
-    value={password}
-    onChangeText={text => setPassword(text)}
-    secureTextEntry
-    style={styles.input}
-  />
-  
-  <Button title='Sign In' onPress={()=> login()} style={styles.button} buttonStyle={styles.buttonText} />
-    <Text onPress={()=>{props.navigation.navigate('Register')}} style={styles.registerText}>
-      Not registered ? Sign up here !
-    </Text>
 
-    <Button 
-  title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
-  onPress={() => {
-    setDarkMode(!darkMode);
-    saveDarkMode(!darkMode);
-  }} 
-  buttonStyle={{
-    backgroundColor: darkMode ? 'green' : 'blue',
-    borderRadius: 50,
-    padding: 10,
-  }}
-/>
-</View>
+  <View style={styles.container} >
+    
+  <Button 
+      // title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
+      onPress={() => {
+        setDarkMode(!darkMode);
+        saveDarkMode(!darkMode);
+      }}
+      buttonStyle={{
+        backgroundColor: darkMode ? '#c4ae1f' : 'blue',
+        borderRadius: 50,
+        padding: 10,
+      }}
+      icon={
+        <Icon
+          name={darkMode ? 'sun' : 'moon'}
+          size={20}
+          color="white"
+        />
+      }
+    />
+    <View style={styles.headerContainer}>
+      <Header/>
+    </View>
+    <Input
+      placeholder='Enter your Email'
+      label='Email'
+      leftIcon={{ type: 'material', name:'email'}}
+      value={email}
+      onChangeText={text => setEmail(text)}
+      style={styles.input}
+    /> 
+    <Input
+      placeholder='Enter your Password'
+      label='Password'
+      leftIcon={{ type: 'material', name:'lock'}}
+      value={password}
+      onChangeText={text => setPassword(text)}
+      secureTextEntry
+      style={styles.input}
+    />
+    
+    <Button title='Sign In' onPress={()=> login()} style={styles.button} buttonStyle={styles.buttonText} />
+      <Text onPress={()=>{props.navigation.navigate('Register')}} style={styles.registerText}>
+        Not registered ? Sign up here !
+      </Text>
+  </View>
+
   )
 };
 

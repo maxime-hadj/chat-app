@@ -4,6 +4,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import jwt_decode from "jwt-decode";
 import socketIO from 'socket.io-client';
+import Header from '../component/header';
 
 
 const socket = socketIO.connect('http://10.10.22.129:3000')

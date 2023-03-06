@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import jwt_decode from "jwt-decode";
+import Header from '../component/header';
 
 //Register screen
 const RegisterScreen = (props) => {

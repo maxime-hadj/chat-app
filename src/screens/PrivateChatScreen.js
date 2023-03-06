@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import Header from '../component/header';
 
 // Ecran PrivateChatScreen => écran d'une conversation privée entre deux utilisateurs
 // Quand on fait précédent, on est envoyé vers le PrivateChatsListScreen

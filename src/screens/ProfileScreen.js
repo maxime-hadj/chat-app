@@ -4,6 +4,7 @@ import { Input, Button } from 'react-native-elements';
 import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
+import Header from '../component/header';
 
 // Ecran ProfileScreen => affichage du profil de l'utilisateur 
 // Si on clique sur le bouton modifier, on est envoyé vers l'écran UpdateProfileScreen

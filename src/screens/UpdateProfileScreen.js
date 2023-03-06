@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Header from '../component/header';
 
 // Ecran UpdateProfileScreen => écran avec form pour que l'utilisateur modifie ses infos, 
 // quand validé, retour vers le ProfileScreen
