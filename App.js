@@ -64,6 +64,7 @@ function UsersStackScreen() {
     <UsersStack.Navigator>
       <UsersStack.Screen name="Persons" component={UsersListScreen} options={{}} />
       <UsersStack.Screen name="Profile" component={ProfileScreen} options={{ }} />
+      <PrivateStack.Screen name="Private Chat" component={PrivateChatScreen} options={{}} />
     </UsersStack.Navigator>
   )
 }
@@ -107,6 +108,9 @@ function AppStackScreen() {
     tabBarInactiveTintColor: "black",
     tabBarLabelStyle: {
       fontSize: 12,
+    },
+    tabBarStyle: {
+      backgroundColor: "white",
     },
   });
 

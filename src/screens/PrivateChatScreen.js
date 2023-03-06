@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import socketIO from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const socket = socketIO.connect('http://10.10.0.236:3000')
+const socket = socketIO.connect('http://10.10.0.39:3000')
 
 
 // Ecran PrivateChatScreen => écran d'une conversation privée entre deux utilisateurs
@@ -15,7 +15,7 @@ const socket = socketIO.connect('http://10.10.0.236:3000')
 
 const PrivateChatScreen = (props) => {
 
-  const apiMessage = 'http://10.10.0.236:3000/api/message/private/'
+  const apiMessage = 'http://10.10.0.39:3000/api/message/private/'
 
   const towardUserId = props.route.params.id_user
   const token = props.route.params.token
@@ -61,7 +61,7 @@ const PrivateChatScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://10.10.0.236:3000/api/message', {
+    fetch('http://10.10.0.39:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ const PrivateChatScreen = (props) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.succes == 1) {
-          fetch('http://10.10.0.236:3000/api/message/private', {
+          fetch('http://10.10.0.39:3000/api/message/private', {
             method:'POST',
             headers: { 'Authorization': 'Bearer ' + token,
                       'Content-Type': 'application/json'
