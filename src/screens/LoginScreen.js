@@ -14,13 +14,14 @@ useEffect(() => {
   retrieveDarkMode().then(value => {
     setDarkMode(value);
   });
+
 }, []);
 
   
  
   const login = async () => {
 
-    fetch('http://10.10.0.136:3000/api/users/login', { 
+    fetch('http://10.10.0.236:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -36,10 +37,11 @@ useEffect(() => {
           const decodedToken = jwt_decode(data.token)
           AsyncStorage.setItem('user_token', data.token);
           props.navigation.navigate('App',{
-            screen: 'Chatrooms',
+            screen: 'Private',
             params: {
               token: data.token,
             },
+            headerLeft:null
           })
         }
       }

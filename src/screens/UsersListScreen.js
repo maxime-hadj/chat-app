@@ -19,7 +19,7 @@ const UsersListScreen = (props) =>{
 
         const userToken = await AsyncStorage.getItem('user_token');
         setLoading(true);
-        fetch('http://10.10.0.136:3000/api/users', {
+        fetch('http://10.10.0.236:3000/api/users', {
             method: 'GET',
             headers:{ Authorization: 'Bearer ' + userToken },
         })

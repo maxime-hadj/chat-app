@@ -30,7 +30,6 @@ const ProfileScreen = (props) => {
 
     let idUser 
 
-    console.log(props.route)
   
     if (props.route.params == undefined) {
       idUser = decodedToken.result.id_user     
@@ -40,7 +39,7 @@ const ProfileScreen = (props) => {
       console.log(props.route.params)
     }
 
-    const apiUrl = 'http://10.10.0.136:3000/api/users/'
+    const apiUrl = 'http://10.10.0.236:3000/api/users/'
     const fetchUrl = apiUrl + idUser
 
     fetch(fetchUrl, {
@@ -99,7 +98,7 @@ const ProfileScreen = (props) => {
         <Button
             title="Discuss"
             onPress={() =>
-                props.navigation.navigate('App', {
+                props.navigation.navigate('Private', {
                     screen: 'Private Chat',
                     params: {
                       id_user: user.id_user,
@@ -113,8 +112,7 @@ const ProfileScreen = (props) => {
         <Button
             title="Edit"
             onPress={() =>
-                props.navigation.navigate('App', {
-                    screen: 'Update Profile',
+                props.navigation.navigate('Update infos', {
                     params: {
                         token: token
                     }

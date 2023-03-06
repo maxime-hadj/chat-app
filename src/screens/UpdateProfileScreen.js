@@ -15,6 +15,8 @@ const UpdateProfileScreen = (props) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
+  console.log(props.navigation)
+
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const update = async () =>{
     alert.alert("Your passwords doesn't match.")
   } else {
     const userToken = await AsyncStorage.getItem('user_token');
-    fetch('http://10.10.0.136:3000/api/users', { 
+    fetch('http://10.10.0.236:3000/api/users', { 
       method: 'PATCH',
       headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + userToken},
       body: JSON.stringify({
@@ -45,10 +47,11 @@ const update = async () =>{
           Alert.alert(data.error)
         } else if (data.success == 1) {
           Alert.alert(
-            "Successfully updated",
-            "Press OK to chat",
+            "Successfully updated.",
+            '',
             [
-              { text: "OK", onPress: () =>{props.navigation.navigate('Profile')} }
+              { text: "OK", onPress:() =>{props.navigation.navigate('My profile')} 
+              }
             ]
           )
         }
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
   input: {
     width: '80%',
     margin: 10,
-    padding: 15,
+    padding: 8,
     fontSize: 16,
     borderColor: '#d3d3d3',
     borderWidth: 1,
@@ -167,9 +170,6 @@ const styles = StyleSheet.create({
     />
     
     <Button title='update' onPress={()=> update()} style={styles.button} buttonStyle={styles.buttonText} />
-      <Text onPress={()=>{navigation.navigate('Chat')}} style={styles.registerText}>
-        Chat here !
-      </Text>
   </View>
   //</ScrollView>
   )

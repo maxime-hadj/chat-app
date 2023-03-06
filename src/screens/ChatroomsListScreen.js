@@ -11,8 +11,7 @@ const ChatroomsListScreen = (props) => {
 
   const [chatrooms, setChatrooms] = useState('');
   const [loading, setLoading] = useState(true);
-
-  const userToken = props.route.params.token
+  const [token, setToken] = useState('');
 
   useEffect(() => {
       getAllChatrooms();
@@ -28,9 +27,12 @@ const ChatroomsListScreen = (props) => {
 
   const getAllChatrooms = async () =>    {
 
+    const userToken = await AsyncStorage.getItem('user_token');
+    setToken(userToken)
+
     setLoading(true);
 
-    fetch('http://10.10.0.136:3000/api/channel', {
+    fetch('http://10.10.0.236:3000/api/channel', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })
@@ -103,7 +105,7 @@ const ChatroomsListScreen = (props) => {
           onPress={() => {
             props.navigation.navigate('Chatroom', {
               id_channel: item.id_channel,
-              token: props.route.params.token
+              token: token
             });
           }}
         >
