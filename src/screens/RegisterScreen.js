@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import jwt_decode from "jwt-decode";
+import ImagePicker from 'react-native-image-picker';
 
 //Register screen
 const RegisterScreen = (props) => {
@@ -10,14 +11,29 @@ const RegisterScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
+  const [avatar, setAvatar] = useState('');
 
+  const selectImage = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        setAvatar(source.uri);
+      }
+    });
+  }
 
   const register = () => {
 
     if(password != password_validation){
       alert.alert("Your passwords doesn't match.")
     } else {
-      fetch('http://10.10.0.39:3000/api/users', { 
+      fetch('http://192.168.0.12:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -25,6 +41,7 @@ const RegisterScreen = (props) => {
           lastname: lastname,
           email: email,
           password: password,
+          avatar: avatar
         })
       })
       .then(data => data.json())
@@ -93,6 +110,10 @@ const RegisterScreen = (props) => {
         onChangeText={text => setEmail(text)}
         id={email}
       /> 
+      <Text>Upload your Avatar</Text>
+      <Button title="Select Image" onPress={selectImage} />
+      {avatar && <Image source={{ uri: avatar }} style={{ width: 200, height: 200 }} 
+      />}
       <Input
         placeholder='Enter your Password'
         label='Password'
