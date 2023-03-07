@@ -16,6 +16,7 @@
     "@react-navigation/stack": "^6.3.11",
     "crypto": "^1.0.1",
     "expo": "~47.0.9",
+    "expo-image-picker": "~14.0.2",
     "expo-status-bar": "~1.4.2",
     "image-picker": "^0.3.1",
     "jsonwebtoken": "^9.0.0",

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { View, Text, Alert, ScrollView } from 'react-native';
+import { Input, Button, Image} from 'react-native-elements';
 import jwt_decode from "jwt-decode";
-import ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 //Register screen
 const RegisterScreen = (props) => {
@@ -13,19 +13,25 @@ const RegisterScreen = (props) => {
   const [password_validation, setPasswordValidation] = useState('');
   const [avatar, setAvatar] = useState('');
 
-  const selectImage = () => {
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
-        setAvatar(source.uri);
-      }
+  const selectImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if ( status !== 'granted') {
+      alert('Persmissiion to access media library is required!');
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality:1
+
     });
+
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
   }
 
   const register = () => {
@@ -84,8 +90,7 @@ const RegisterScreen = (props) => {
   };
   
   return (
-    <View>
-    <View style={styles.inputContainer}>
+    <ScrollView style={styles.inputContainer}>
       <Input
         placeholder='Enter your First Name'
         label='First Name'
@@ -133,16 +138,14 @@ const RegisterScreen = (props) => {
         id={password_validation}
         secureTextEntry
       />
-    </View>
+      
       <View style={styles.buttonContainer}>
       <Button title='Register' onPress={()=> register()} />
-    </View>
-    <View>
       <Text onPress={()=>{props.navigation.navigate('Login')}} style={styles.text}>
         Got an account ? Login here !
       </Text>
     </View>
-  </View>
+  </ScrollView>
   )
 }
 

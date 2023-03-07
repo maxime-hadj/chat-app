@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import socketIO from 'socket.io-client';
 
 
-const socket = socketIO.connect('http://10.10.0.39:3000')
+const socket = socketIO.connect('http://192.168.0.12:3000')
 
 // Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
 // Si on clique sur le nom du channel qui sera en haut de la page, 
@@ -14,7 +14,7 @@ const socket = socketIO.connect('http://10.10.0.39:3000')
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http:/10.10.0.39:3000/api/message/'
+  const apiMessage = 'http://192.168.0.12:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
@@ -59,7 +59,7 @@ const ChatroomScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://10.10.0.39:3000/api/message', {
+    fetch('http://192.168.0.12:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
