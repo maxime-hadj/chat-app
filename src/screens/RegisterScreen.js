@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Alert, ScrollView } from 'react-native';
+import { View, Text, Alert, ScrollView, SafeAreaViewComponent } from 'react-native';
 import { Input, Button, Image} from 'react-native-elements';
 import jwt_decode from "jwt-decode";
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import * as ImageManipulator from 'expo-image-manipulator';
+
 
 //Register screen
 const RegisterScreen = (props) => {
@@ -11,44 +14,57 @@ const RegisterScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState(null);
 
-  const selectImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if ( status !== 'granted') {
-      alert('Persmissiion to access media library is required!');
-      return;
-    }
-
+  
+  const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
-      quality:1
-
+      aspect: [4, 3],
+      quality: 1,
+      selectionLimit: 1,
     });
-
+  
     if (!result.canceled) {
-      setAvatar(result.assets[0].uri);
+      const filename = result.assets[0].uri.split('/').pop();
+
+      const { uri } = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 500, height: 500 } }],
+        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      
+      const imageContent = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      setAvatar({
+        uri: uri,
+        name: filename,
+        type: 'image/jpeg',
+        content: imageContent,
+      });
     }
-  }
+  };
+
 
   const register = () => {
 
     if(password != password_validation){
-      alert.alert("Your passwords doesn't match.")
+      alert("Your passwords doesn't match.")
     } else {
-      fetch('http://192.168.0.12:3000/api/users', { 
+      const data = {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: password,
+        avatar: avatar,
+      };
+      fetch('http://10.10.3.24:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          password: password,
-          avatar: avatar
-        })
+        body: JSON.stringify(data),
       })
       .then(data => data.json())
       .then(data =>  { 
@@ -116,8 +132,8 @@ const RegisterScreen = (props) => {
         id={email}
       /> 
       <Text>Upload your Avatar</Text>
-      <Button title="Select Image" onPress={selectImage} />
-      {avatar && <Image source={{ uri: avatar }} style={{ width: 200, height: 200 }} 
+      <Button title="Select Image" onPress={pickImage} />
+      {avatar && <Image source={{ uri: avatar.uri }} style={{ width: 200, height: 200 }} 
       />}
       <Input
         placeholder='Enter your Password'

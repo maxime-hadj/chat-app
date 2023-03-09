@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Alert, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, Alert, FlatList, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
@@ -22,11 +22,11 @@ const PrivateChatsListScreen = (props) => {
 
   const [darkMode, setDarkMode] = useState(false);
 
-  // useEffect(() => {
-  //   // retrieveDarkMode().then(value => {
-  //   //   setDarkMode(value);
-  //   // });
-  // }, []);
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
 
 
   const getAllDiscussions = async () =>    {
@@ -41,10 +41,11 @@ const PrivateChatsListScreen = (props) => {
     
     const array = []
     const discussionsMess = []
+    const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
     
     setLoading(true);
 
-    fetch('http://192.168.0.12:3000/api/message', {
+    fetch('http://10.10.3.24:3000/api/message', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })
@@ -87,8 +88,32 @@ const PrivateChatsListScreen = (props) => {
         }
       }
 
+      const processedUsers = discussionsMess.map(user => {
+        if (!user.avatar_from && !user.avatar_to) {
+          return { 
+            ...user,
+            avatar_from:  unknownAvatar,
+            avatar_to:unknownAvatar
+          }
+        } else if (!user.avatar_to) {
+          return { 
+            ...user,
+            avatar_to: unknownAvatar
+          }    
+        } else if (!user.avatar_from) {
+          return { 
+            ...user,
+            avatar_from: unknownAvatar
+          }    
+        } else {
+          return { 
+            ...user
+          }
+        }
+      });
+
       setLoading(false);
-      setDiscussions(discussionsMess);
+      setDiscussions(processedUsers);
     })
     .catch(function(error) {
         console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -121,24 +146,36 @@ const PrivateChatsListScreen = (props) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: darkMode ? 'black' : 'white',
+      backgroundColor: '#F5FCFF',
     },
     discussionsContainer: {
+      flex: 1,
+      flexDirection:'row',
       margin: 10,
       padding: 10,
       borderBottomWidth: 1,
       borderColor: '#d3d3d3',
     },
     userTo: {
-      fontSize: 18,
+      fontSize: 14,
+      marginLeft: 20,
+      paddingTop:'2%',
+      fontWeight:'900',
+      marginBottom: 4
     },
-    DarkBtn: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: darkMode ? 'black' : 'white',
+    userText: {
+      flex:1,
+      flexDirection:'column'
+    },
+    lastMess: {
+      paddingLeft: 20,
+      fontWeight:'400',
+    },
+    avatar: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      marginColor: '#black',
     },
   });
 
@@ -147,41 +184,36 @@ const PrivateChatsListScreen = (props) => {
     <View>
       <FlatList
         data={discussions}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
-          <View style={styles.discussionsContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate('Private Chat', {
-                  id_user: item.id_user_to == userId ? item.id_user_from : item.id_user_to,
-                  token: token
-                });
-              }}
-            >
-              <Text style={{fontWeight: 'bold'}}>
+          <TouchableOpacity
+            style={styles.discussionsContainer}
+            onPress={() => {
+              props.navigation.navigate('Private Chat', {
+                id_user: item.id_user_to == userId ? item.id_user_from : item.id_user_to,
+                token: token
+              });
+            }}
+          >
+            <Image 
+              style={styles.avatar}
+              source={{uri: item.id_user_to == userId ? item.avatar_from : item.avatar_to }} 
+            />
+            <View style={styles.userText}>
+              <Text style={styles.userTo}>
                 {item.id_user_to == userId ? item.firstname_from + ' ' + item.lastname_from  + ' : ': item.firstname_to + ' ' + item.lastname_to + ' : '}
               </Text>
-              <Text style={styles.userTo}>
+              <Text style={styles.lastMess}>
                 {item.text}
               </Text>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         )}
         keyExtractor={item => item.id_users_messages}
       />
-          {/* <Button 
-      title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
-      onPress={() => {
-        setDarkMode(!darkMode);
+    </View>
 
-        saveDarkMode(!darkMode);
-      }} 
-      buttonStyle={{
-        backgroundColor: darkMode ? 'green' : 'blue',
-        borderRadius: 50,
-        padding: 10,
-      }}
-    /> */}
-      </View>
 
   );
 };

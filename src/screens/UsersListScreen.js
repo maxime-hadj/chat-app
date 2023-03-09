@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, ScrollView, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, StatusBar,  TouchableOpacity,  } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,21 +17,34 @@ const UsersListScreen = (props) =>{
 
     const getAllUser = async () =>    {
 
-        const userToken = await AsyncStorage.getItem('user_token');
-        setLoading(true);
-        fetch('http://192.168.0.12:3000/api/users', {
-            method: 'GET',
-            headers:{ Authorization: 'Bearer ' + userToken },
-        })
-        .then(response => response.json())
-        .then(response =>{
-            console.log(response.data)
-            setUsers(response.data);
-            setLoading(false);
-        })
-        .catch(function(error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-        })
+      const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
+      const userToken = await AsyncStorage.getItem('user_token');
+      setLoading(true);
+      fetch('http://10.10.3.24:3000/api/users', {
+          method: 'GET',
+          headers:{ Authorization: 'Bearer ' + userToken },
+      })
+      .then(response => response.json())
+      .then(response =>{
+        const processedUsers = response.data.map(user => {
+          if (!user.avatar) {
+            return { 
+              ...user,
+              avatar: unknownAvatar
+            }
+          } else {
+            return { 
+              ...user
+            }
+          }
+        });
+        
+        setUsers(processedUsers);
+        setLoading(false);
+      })
+      .catch(function(error) {
+          console.log('There has been a problem with your fetch operation: ' + error.message);
+      })
     }
 
     if (loading) {
@@ -41,42 +54,58 @@ const UsersListScreen = (props) =>{
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#F5FCFF',
       },
       userContainer: {
+        flex: 1,
+        flexDirection:'row',
         margin: 10,
         padding: 10,
         borderBottomWidth: 1,
         borderColor: '#d3d3d3',
       },
       userName: {
-        fontSize: 18,
+        fontSize: 14,
+        marginLeft: 20,
+        paddingTop:'5%',
+        fontWeight:'900'
+      },
+      avatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        marginColor: '#black'
       },
     });
 
     return (
-  <View style={styles.container}>
-    <FlatList
-      data={users}
-      renderItem={({ item }) => (
-        <View style={styles.userContainer}>
-          <Text 
-            style={styles.userName}
-            onPress={() => {
+      <View style={styles.container}>
+        <FlatList
+          data={users}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.userContainer}
+              onPress={() => {
               props.navigation.navigate('Profile', {
                 id_user: item.id_user,
               });
-            }}
-          >
-            {item.firstname} {item.lastname}
-          </Text>
-        </View>
-      )}
-      keyExtractor={item => item.id_user}
-    />
-  </View>
+            }}>
+            <Image 
+              style={styles.avatar}
+              source={{uri: item.avatar}} 
+            />
+            <Text 
+              style={styles.userName}
+            >
+              {item.firstname} {item.lastname}
+            </Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.id_user}
+        />
+      </View>
     );
 
 

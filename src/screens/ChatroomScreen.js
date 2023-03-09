@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import socketIO from 'socket.io-client';
 
 
-const socket = socketIO.connect('http://192.168.0.12:3000')
+const socket = socketIO.connect('http://10.10.3.24:3000')
 
 // Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
 // Si on clique sur le nom du channel qui sera en haut de la page, 
@@ -14,19 +14,23 @@ const socket = socketIO.connect('http://192.168.0.12:3000')
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://192.168.0.12:3000/api/message/'
+  const apiMessage = 'http://10.10.3.24:3000/api/message/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
   const decodedToken = jwt_decode(token)
   const userId = decodedToken.result.id_user
+  const userAvatar = decodedToken.result.avatar
   const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
+  const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
 
   let apiUrl 
 
   const [messages, setMessages] = useState([]);
 
   const [darkMode, setDarkMode] = useState(false);
+
+  
 
   //Fetching previous messages
   const getMessagesFromDb = async () => {
@@ -48,8 +52,9 @@ const ChatroomScreen = (props) => {
           user: {
             _id: data.id_user,
             name: data.firstname + ' ' + data.lastname,
-            avatar: 'https://placeimg.com/140/140/any'
-          },
+            avatar: data.avatar ? data.avatar : unknownAvatar
+            
+          }
         }))
       )
     }).catch(function(error) {
@@ -59,7 +64,7 @@ const ChatroomScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://192.168.0.12:3000/api/message', {
+    fetch('http://10.10.3.24:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -130,7 +135,7 @@ const ChatroomScreen = (props) => {
           user={{
               _id: userId,
               name: userName,
-              avatar: 'https://placeimg.com/140/140/any'
+              avatar: userAvatar
           }}
       />
   );
