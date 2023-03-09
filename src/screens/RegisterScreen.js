@@ -31,8 +31,8 @@ const RegisterScreen = (props) => {
 
       const { uri } = await ImageManipulator.manipulateAsync(
         result.assets[0].uri,
-        [{ resize: { width: 500, height: 500 } }],
-        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+        [{ resize: { width: 300, height: 300 } }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
       );
       
       const imageContent = await FileSystem.readAsStringAsync(uri, {
