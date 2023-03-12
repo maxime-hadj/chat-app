@@ -98,16 +98,20 @@ const PrivateChatsListScreen = (props) => {
         } else if (!user.avatar_to) {
           return { 
             ...user,
-            avatar_to: unknownAvatar
+            avatar_to: unknownAvatar,
+            avatar_from: user.avatar_from.replace("localhost", "192.168.0.12")
           }    
         } else if (!user.avatar_from) {
           return { 
             ...user,
-            avatar_from: unknownAvatar
+            avatar_from: unknownAvatar,
+            avatar_to: user.avatar_to.replace("localhost", "192.168.0.12")
           }    
         } else {
           return { 
-            ...user
+            ...user,
+            avatar_from: user.avatar_from.replace("localhost", "192.168.0.12"),
+            avatar_to: user.avatar_to.replace("localhost", "192.168.0.12")
           }
         }
       });
