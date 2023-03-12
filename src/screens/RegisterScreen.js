@@ -61,7 +61,7 @@ const RegisterScreen = (props) => {
         password: password,
         avatar: avatar,
       };
-      fetch('http://10.10.3.24:3000/api/users', { 
+      fetch('http://192.168.0.12:3000/api/users', { 
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data),

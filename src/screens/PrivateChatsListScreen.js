@@ -45,7 +45,7 @@ const PrivateChatsListScreen = (props) => {
     
     setLoading(true);
 
-    fetch('http://10.10.3.24:3000/api/message', {
+    fetch('http://192.168.0.12:3000/api/message', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })

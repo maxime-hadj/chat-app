@@ -20,13 +20,14 @@ const UsersListScreen = (props) =>{
       const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
       const userToken = await AsyncStorage.getItem('user_token');
       setLoading(true);
-      fetch('http://10.10.3.24:3000/api/users', {
+      fetch('http://192.168.0.12:3000/api/users', {
           method: 'GET',
           headers:{ Authorization: 'Bearer ' + userToken },
       })
       .then(response => response.json())
       .then(response =>{
         const processedUsers = response.data.map(user => {
+
           if (!user.avatar) {
             return { 
               ...user,
@@ -34,7 +35,8 @@ const UsersListScreen = (props) =>{
             }
           } else {
             return { 
-              ...user
+              ...user,
+              avatar: user.avatar.replace("localhost", "192.168.0.12"),
             }
           }
         });
@@ -80,6 +82,7 @@ const UsersListScreen = (props) =>{
 
     return (
       <View style={styles.container}>
+
         <FlatList
           data={users}
           showsVerticalScrollIndicator={false}
@@ -103,7 +106,7 @@ const UsersListScreen = (props) =>{
             </Text>
             </TouchableOpacity>
           )}
-          keyExtractor={item => item.id_user}
+          keyExtractor={item => item.id_user.toString()}
         />
       </View>
     );
