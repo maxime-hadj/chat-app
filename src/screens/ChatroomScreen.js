@@ -20,9 +20,9 @@ const ChatroomScreen = (props) => {
   const token = props.route.params.token
   const decodedToken = jwt_decode(token)
   const userId = decodedToken.result.id_user
-  const userAvatar = decodedToken.result.avatar
-  const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
   const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
+  const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
+  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "192.168.0.12") || unknownAvatar;
 
   let apiUrl 
 
@@ -52,7 +52,7 @@ const ChatroomScreen = (props) => {
           user: {
             _id: data.id_user,
             name: data.firstname + ' ' + data.lastname,
-            avatar: data.avatar ? data.avatar : unknownAvatar
+            avatar: data.avatar ? data.avatar.replace("localhost", "192.168.0.12") : unknownAvatar
             
           }
         }))
