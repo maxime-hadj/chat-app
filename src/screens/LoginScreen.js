@@ -10,13 +10,14 @@ import Header from '../component/header';
 const LoginScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState('');
+  
 
-useEffect(() => {
-  retrieveDarkMode().then(value => {
-    setDarkMode(value);
-  });
-}, []);
+  useEffect(() => {
+    retrieveDarkMode().then(value => {
+      setDarkMode(value);
+    });
+  }, []);
 
   
  
@@ -76,7 +77,7 @@ useEffect(() => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: darkMode ? 'black' : 'white',
-      //color: darkMode ? 'white' : 'white'
+      color: darkMode ? 'white' : 'black',
     },
     input: {
       width: '80%',
@@ -86,7 +87,7 @@ useEffect(() => {
       borderColor: '#d3d3d3',
       borderWidth: 1,
       borderRadius: 5,
-      color: darkMode ? 'white' : 'white'
+      color: darkMode ? 'white' : 'black'
     },
     button: {
       margin: 10,
@@ -107,12 +108,6 @@ useEffect(() => {
       color: '#0064e1',
       textAlign: 'center',
     },
-    DarkBtn: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: darkMode ? 'black' : 'white',
-    },
     header: {
       position: 'fixed',
       top: 0,
@@ -120,7 +115,8 @@ useEffect(() => {
       zIndex: 1,
     },
   });
-    
+  console.log(darkMode);
+
   return (
 
   <View style={styles.container} >
@@ -145,9 +141,10 @@ useEffect(() => {
       }
     />
     <View style={styles.headerContainer}>
-      <Header/>
+    <Header darkMode={darkMode} setDarkMode={setDarkMode} />
     </View>
     <Input
+    containerStyle={styles.input}
       placeholder='Enter your Email'
       label='Email'
       leftIcon={{ type: 'material', name:'email'}}
@@ -156,6 +153,7 @@ useEffect(() => {
       style={styles.input}
     /> 
     <Input
+    containerStyle={styles.input}
       placeholder='Enter your Password'
       label='Password'
       leftIcon={{ type: 'material', name:'lock'}}
@@ -165,8 +163,8 @@ useEffect(() => {
       style={styles.input}
     />
     
-    <Button title='Sign In' onPress={()=> login()} style={styles.button} buttonStyle={styles.buttonText} />
-      <Text onPress={()=>{props.navigation.navigate('Register')}} style={styles.registerText}>
+    <Button containerStyle={styles.button} title='Sign In' onPress={()=> login()} style={styles.button} buttonStyle={styles.buttonText} />
+      <Text containerStyle={styles.registerText} onPress={()=>{props.navigation.navigate('Register')}} style={styles.registerText}>
         Not registered ? Sign up here !
       </Text>
   </View>
