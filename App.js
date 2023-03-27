@@ -33,7 +33,7 @@ function PrivateStackScreen() {
     <PrivateStack.Navigator>
       <PrivateStack.Screen name="Discussions" component={PrivateChatsListScreen} options={{headerLeft: null}} />
       <PrivateStack.Screen name="Private Chat" component={PrivateChatScreen} options={{}} />
-      <PrivateStack.Screen name="User Profile" component={ProfileScreen} options={{ }} />
+      <PrivateStack.Screen name="Profile" component={ProfileScreen} options={{ }} />
     </PrivateStack.Navigator>
   )
 }

@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useLayoutEffect} from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, Image } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { GiftedChat } from 'react-native-gifted-chat'
 import jwt_decode from "jwt-decode";
 import socketIO from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const socket = socketIO.connect('http://192.168.0.12:3000')
 
 
@@ -22,6 +21,10 @@ const PrivateChatScreen = (props) => {
   const decodedToken = jwt_decode(token)
   const userId = decodedToken.result.id_user
   const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
+  const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
+  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "192.168.0.12") || unknownAvatar;
+
+
 
   let apiUrl 
 
@@ -42,14 +45,15 @@ const PrivateChatScreen = (props) => {
     .then(response => {
       let array = response.data
       setMessages(
-        array.map(data => ({ 
+        array.map(data => 
+          ({ 
           _id : data.id_message,
           createdAt: data.date,
           text: data.text,
           user: {
             _id: data.id_user_from,
             name: data.firstname + ' ' + data.lastname,
-            avatar: 'https://placeimg.com/140/140/any',
+            avatar: data.avatar_from ? data.avatar_from.replace("localhost", "192.168.0.12") : unknownAvatar
           },
         })
         )
@@ -152,7 +156,11 @@ const PrivateChatScreen = (props) => {
           user={{
               _id: userId,
               name: userName,
-              avatar: 'https://placeimg.com/140/140/any'
+              avatar: (
+                <TouchableOpacity onPress={() => console.log("Avatar pressed")}>
+                    <Image source={{ uri: userAvatar }} />
+                </TouchableOpacity>
+            )
           }}
       />
   );
