@@ -31,11 +31,13 @@ useEffect(() => {
     })
     .then(data => data.json())
     .then(data =>  { 
-        if(data.error) {
-          Alert.alert(data.error)
+        console.log(data)
+        if(data.data) {
+          Alert.alert(data.data)
         } else if (data.success == 1) {
           const decodedToken = jwt_decode(data.token)
           AsyncStorage.setItem('user_token', data.token);
+          console.log('succes')
           props.navigation.navigate('App',{
             screen: 'Private',
             params: {

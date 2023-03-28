@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Alert, ScrollView, SafeAreaViewComponent } from 'react-native';
+import { View, Text, Alert, ScrollView, SafeAreaViewComponent} from 'react-native';
 import { Input, Button, Image} from 'react-native-elements';
 import jwt_decode from "jwt-decode";
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import * as ImageManipulator from 'expo-image-manipulator';
+import sanitizeHtml from 'sanitize-html';
 
 
 //Register screen
@@ -27,8 +28,24 @@ const RegisterScreen = (props) => {
     });
   
     if (!result.canceled) {
-      const filename = result.assets[0].uri.split('/').pop();
 
+      const filename = result.assets[0].uri.split('/').pop();
+      const fileType = filename.split('.').pop().toLowerCase();
+      const allowedFileTypes = ['jpg', 'jpeg', 'png'];
+      const maxSizeInBytes = 5242880; // 5MB
+      const imageSizeInBytes = result.assets[0].fileSize;
+  
+      if (!allowedFileTypes.includes(fileType)) {
+        console.log('Unauthorized file type.');
+        return;
+      }
+  
+      if (imageSizeInBytes > maxSizeInBytes) {
+        console.log('Unauthorized file over 5MB.');
+        return;
+      }
+  
+      
       const { uri } = await ImageManipulator.manipulateAsync(
         result.assets[0].uri,
         [{ resize: { width: 300, height: 300 } }],
@@ -51,36 +68,63 @@ const RegisterScreen = (props) => {
 
   const register = () => {
 
-    if(password != password_validation){
-      alert("Your passwords doesn't match.")
-    } else {
-      const data = {
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: password,
-        avatar: avatar,
-      };
-      fetch('http://192.168.0.12:3000/api/users', { 
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data),
-      })
-      .then(data => data.json())
-      .then(data =>  { 
-          if(data.error) {
-            Alert.alert(data.error)
-          } else if (data.success == 1) {
-            Alert.alert(
-              "Successfully registered",
-              "Press OK to login",
-              [
-                { text: "OK", onPress: () =>{props.navigation.navigate('Login')} }
-              ]
-            )
-          }
-      })
+    const sanitizedFirstname = sanitizeHtml(firstname)
+    const sanitizedLastname = sanitizeHtml(lastname)
+    const sanitizedEmail = sanitizeHtml(email)
+    const sanitizedPassword = sanitizeHtml(password)
+    const sanitizedPasswordValidation = sanitizeHtml(password_validation)
+
+    
+    const namesRegex = "^[a-zA-ZÀ-ÿ -]+$"
+
+    //Verifying firstname & lastname without numbers or special caracters except accents and "-"
+    if (!sanitizedFirstname.match(namesRegex) || !sanitizedLastname.match(namesRegex)){
+      alert("Your firstname and lastname can only contain letters, accents, blank space and '-'.")
+      return;
     }
+
+    //Verifying email format
+    if (!sanitizedEmail.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)) {
+      alert("Your email is not correct.")
+      return;
+    }
+
+    if(!sanitizedPassword.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[?!&#])[A-Za-z\d?!&#]{8,}$/)) {
+      alert("The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character (? or ! or & or #).")
+      return;
+    }
+
+    if(sanitizedPassword != sanitizedPasswordValidation){
+      alert("Your passwords doesn't match.")
+      return;
+    }
+
+    const data = {
+      firstname: sanitizedFirstname,
+      lastname: sanitizedLastname,
+      email: sanitizedEmail,
+      password: sanitizedPassword,
+      avatar: avatar,
+    };
+    fetch('http://192.168.0.12:3000/api/users', { 
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data),
+    })
+    .then(data => data.json())
+    .then(data =>  { 
+        if(data.error) {
+          Alert.alert(data.error)
+        } else if (data.success == 1) {
+          Alert.alert(
+            "Successfully registered",
+            "Press OK to login",
+            [
+              { text: "OK", onPress: () =>{props.navigation.navigate('Login')} }
+            ]
+          )
+        }
+    })
   }
 
   const styles = {
