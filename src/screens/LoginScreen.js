@@ -46,6 +46,7 @@ useEffect(() => {
               token: data.token,
             },
             headerLeft:null
+            
           })
         }
       }
