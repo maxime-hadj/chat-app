@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Alert, } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
+import sanitizeHtml from 'sanitize-html';
 
 //Screen to login
 const LoginScreen = (props) => {
@@ -17,16 +18,17 @@ useEffect(() => {
 
 }, []);
 
+  const sanitizedEmail = sanitizeHtml(email)
+  const sanitizedPassword = sanitizeHtml(password)
   
- 
   const login = async () => {
 
     fetch('http://192.168.0.12:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        email: email,
-        password: password,
+        email: sanitizedEmail,
+        password: sanitizedPassword,
       })
     })
     .then(data => data.json())
