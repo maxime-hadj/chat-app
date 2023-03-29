@@ -33,10 +33,8 @@ const ProfileScreen = (props) => {
   
     if (props.route.params == undefined) {
       idUser = decodedToken.result.id_user     
-      console.log('ok') 
     } else  {
       idUser = props.route.params.id_user  
-      console.log(props.route.params)
     }
 
     const apiUrl = 'http://192.168.0.12:3000/api/users/'

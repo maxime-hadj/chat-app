@@ -15,8 +15,6 @@ const UpdateProfileScreen = (props) => {
   const [password, setPassword] = useState('');
   const [password_validation, setPasswordValidation] = useState('');
 
-  console.log(props.navigation)
-
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {

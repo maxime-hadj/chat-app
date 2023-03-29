@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { View, Text, ScrollView, StyleSheet, StatusBar,  TouchableOpacity,  } from 'react-native';
 import { Image, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
 
 // Ecran UsersListScreen => affichage de la liste des users
 // Si on clique sur un User on est envoyé vers la conversation privée avec ce user donc l'écran PrivateChatScreen
@@ -19,6 +20,10 @@ const UsersListScreen = (props) =>{
 
       const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
       const userToken = await AsyncStorage.getItem('user_token');
+      const decodedToken = jwtDecode(userToken)
+      console.log(decodedToken.result.id_user)
+      const idUser = decodedToken.result.id_user
+
       setLoading(true);
       fetch('http://192.168.0.12:3000/api/users', {
           method: 'GET',
@@ -27,9 +32,15 @@ const UsersListScreen = (props) =>{
       .then(response => response.json())
       .then(response =>{
 
-        console.log(response)
 
         const processedUsers = response.data.map(user => {
+
+
+          // if (user.id_user.toString() == idUser){
+          //   return  {
+
+          //   }
+          // }
 
           if (!user.avatar) {
             return { 

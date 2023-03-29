@@ -3,9 +3,9 @@ import { View, Text, Alert, TouchableOpacity, Image } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { GiftedChat } from 'react-native-gifted-chat'
 import jwt_decode from "jwt-decode";
-import socketIO from 'socket.io-client';
+import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const socket = socketIO.connect('http://192.168.0.12:3000')
+const socket = io.connect('http://192.168.0.12:3000')
 
 
 // Ecran PrivateChatScreen => écran d'une conversation privée entre deux utilisateurs
@@ -100,7 +100,7 @@ const PrivateChatScreen = (props) => {
                 name: userName,
                 id: '${socket.id}${Math.random()}',
                   socketID: socket.id
-                })      
+                })        
               }
           })
           .catch(function(error) {
@@ -117,7 +117,9 @@ const PrivateChatScreen = (props) => {
 
   // Call fetching previous messages with layoutEffect
   useLayoutEffect(() => {
-    socket.on('privateMessageResponse', (data) => setMessages([...messages, data]));
+    // socket.on('privateMessageResponse', (data) =>
+    // setMessages([...messages, data])
+    // );
     getMessagesFromDb()
     retrieveDarkMode().then(value => {
       setDarkMode(value);
