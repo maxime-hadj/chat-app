@@ -3,8 +3,9 @@ import { View, Text, Alert, FlatList, StyleSheet, TouchableOpacity, Image} from 
 import { Input, Button } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
-import socketIO from 'socket.io-client';
-const socket = socketIO.connect('http://192.168.0.12:3000')
+import io from 'socket.io-client';
+
+const socket = io.connect('http://192.168.0.12:3000')
 
 //Ecran PrivateChatsListScreen => écran de la liste des conversations privées de l'utilisateur (comme sur Messenger)
 // Quand on clique sur un des éléments, on est envoyé vers la conversation privée ( donc PrivateChatScreen)
@@ -17,7 +18,10 @@ const PrivateChatsListScreen = (props) => {
   const [userFirstname, setUserFirstname] = useState('')
 
   useLayoutEffect(() => {
-    // socket.on('privateMessageResponse', (data) => { console.log('hello')});
+    socket.on('privateMessageResponse', (data) => {
+      console.log('private message received')
+      getAllDiscussions();
+    });
     getAllDiscussions();
     retrieveDarkMode().then(value => {
     setDarkMode(value)});

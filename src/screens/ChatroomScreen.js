@@ -3,10 +3,10 @@ import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import jwt_decode from "jwt-decode";
-import socketIO from 'socket.io-client';
+import io from 'socket.io-client'
 
 
-const socket = socketIO.connect('http://192.168.0.12:3000')
+const socket = io.connect('http://192.168.0.12:3000')
 
 // Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
 // Si on clique sur le nom du channel qui sera en haut de la page, 
@@ -78,8 +78,8 @@ const ChatroomScreen = (props) => {
     .then(data => data.json())
     .then(data =>  { 
         if(data.error) {
-          Alert.alert(data.error)
-        } else if (data.success == 1) {
+          alert(data.error)
+        } else if (data.succes == 1) {
           socket.emit('message', {
             text: text,
             name: userName,
