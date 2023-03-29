@@ -17,7 +17,7 @@ const PrivateChatsListScreen = (props) => {
   const [userFirstname, setUserFirstname] = useState('')
 
   useLayoutEffect(() => {
-    socket.on('privateMessageResponse', (data) => { console.log('hello')});
+    // socket.on('privateMessageResponse', (data) => { console.log('hello')});
     getAllDiscussions();
     retrieveDarkMode().then(value => {
     setDarkMode(value)});
@@ -42,7 +42,10 @@ const PrivateChatsListScreen = (props) => {
     
     setLoading(true);
 
-    fetch('http://192.168.0.12:3000/api/message', {
+    let api = 'http://192.168.0.12:3000/api/message/discussions/'
+    const apiUrl = api + userId
+
+    fetch(apiUrl, {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })

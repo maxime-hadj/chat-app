@@ -26,6 +26,9 @@ const UsersListScreen = (props) =>{
       })
       .then(response => response.json())
       .then(response =>{
+
+        console.log(response)
+
         const processedUsers = response.data.map(user => {
 
           if (!user.avatar) {
