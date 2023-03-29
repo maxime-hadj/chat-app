@@ -38,6 +38,7 @@ const ChatroomsListScreen = (props) => {
     })
     .then(response => response.json())
     .then(response =>{
+
         setChatrooms(response.data);
         setLoading(false);
     })

@@ -14,7 +14,7 @@ const socket = socketIO.connect('http://192.168.0.12:3000')
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://192.168.0.12:3000/api/message/'
+  const apiMessage = 'http://192.168.0.12:3000/api/message/channel/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
@@ -43,6 +43,7 @@ const ChatroomScreen = (props) => {
     })
     .then(response => response.json())
     .then(response => {
+
       let array = response.data
       setMessages(
         array.map(data => ({ 
