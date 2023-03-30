@@ -5,7 +5,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import jwt_decode from "jwt-decode";
 import io from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const socket = io.connect('http://192.168.0.12:3000')
+const socket = io.connect('http://10.10.4.1:3000')
 
 
 // Ecran PrivateChatScreen => écran d'une conversation privée entre deux utilisateurs
@@ -14,7 +14,7 @@ const socket = io.connect('http://192.168.0.12:3000')
 
 const PrivateChatScreen = (props) => {
 
-  const apiMessage = 'http://192.168.0.12:3000/api/message/private/'
+  const apiMessage = 'http://10.10.4.1:3000/api/message/private/'
 
   const towardUserId = props.route.params.id_user
   const token = props.route.params.token
@@ -53,7 +53,7 @@ const PrivateChatScreen = (props) => {
           user: {
             _id: data.id_user_from,
             name: data.firstname + ' ' + data.lastname,
-            avatar: data.avatar_from ? data.avatar_from.replace("localhost", "192.168.0.12") : unknownAvatar
+            avatar: data.avatar_from ? data.avatar_from.replace("localhost", "10.10.4.1") : unknownAvatar
           },
         })
         )
@@ -65,7 +65,7 @@ const PrivateChatScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://192.168.0.12:3000/api/message', {
+    fetch('http://10.10.4.1:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ const PrivateChatScreen = (props) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.succes == 1) {
-          fetch('http://192.168.0.12:3000/api/message/private', {
+          fetch('http://10.10.4.1:3000/api/message/private', {
             method:'POST',
             headers: { 'Authorization': 'Bearer ' + token,
                       'Content-Type': 'application/json'
@@ -117,9 +117,9 @@ const PrivateChatScreen = (props) => {
 
   // Call fetching previous messages with layoutEffect
   useLayoutEffect(() => {
-    // socket.on('privateMessageResponse', (data) =>
-    // setMessages([...messages, data])
-    // );
+    socket.on('privateMessageResponse', (data) =>
+    setMessages([...messages, data])
+    );
     getMessagesFromDb()
     retrieveDarkMode().then(value => {
       setDarkMode(value);

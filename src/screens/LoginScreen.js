@@ -23,7 +23,7 @@ useEffect(() => {
   
   const login = async () => {
 
-    fetch('http://192.168.0.12:3000/api/users/login', { 
+    fetch('http://10.10.4.1:3000/api/users/login', { 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

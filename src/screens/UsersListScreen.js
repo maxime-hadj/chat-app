@@ -25,7 +25,7 @@ const UsersListScreen = (props) =>{
       const idUser = decodedToken.result.id_user
 
       setLoading(true);
-      fetch('http://192.168.0.12:3000/api/users', {
+      fetch('http://10.10.4.1:3000/api/users', {
           method: 'GET',
           headers:{ Authorization: 'Bearer ' + userToken },
       })
@@ -36,11 +36,9 @@ const UsersListScreen = (props) =>{
         const processedUsers = response.data.map(user => {
 
 
-          // if (user.id_user.toString() == idUser){
-          //   return  {
-
-          //   }
-          // }
+          if (user.id_user === idUser){
+            return null;
+          }
 
           if (!user.avatar) {
             return { 
@@ -50,10 +48,10 @@ const UsersListScreen = (props) =>{
           } else {
             return { 
               ...user,
-              avatar: user.avatar.replace("localhost", "192.168.0.12"),
+              avatar: user.avatar.replace("localhost", "10.10.4.1"),
             }
           }
-        });
+        }).filter(Boolean);
         
         setUsers(processedUsers);
         setLoading(false);
