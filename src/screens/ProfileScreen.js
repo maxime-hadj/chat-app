@@ -15,15 +15,11 @@ const ProfileScreen = (props) => {
   const [token, setToken] = useState('');
   const [isCurrentUser, setIsCurrentUser] = useState('')
 
-
-  useEffect(() =>{
-    getUser();
-  }, []);
-
   const getUser = async () => {
 
     const userToken = await AsyncStorage.getItem('user_token');
     const decodedToken = jwt_decode(userToken);
+    const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
 
     setToken(userToken)
     setLoading(true);
@@ -37,7 +33,7 @@ const ProfileScreen = (props) => {
       idUser = props.route.params.id_user  
     }
 
-    const apiUrl = 'http://10.10.4.1:3000/api/users/'
+    const apiUrl = 'http://192.168.0.14:3000/api/users/'
     const fetchUrl = apiUrl + idUser
 
     fetch(fetchUrl, {
@@ -46,7 +42,6 @@ const ProfileScreen = (props) => {
     })
     .then(response => response.json())
     .then(response =>{
-
       setUser(response.data);
       setLoading(false);
 
@@ -56,24 +51,22 @@ const ProfileScreen = (props) => {
         setIsCurrentUser(false)
       }
 
-
     })
     .catch(function(error){
       Alert.alert("Error", "There has been a problem with your fetch operation: " + error.message);
     })
   }
 
+  getUser();
+
   
-
-  if (loading){
-    return <Text>Loading...</Text>
-  }
-
   const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
-        backgroundColor: '#f5f5f5'
+        backgroundColor: '#f5f5f5',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     text: {
         fontSize: 18,
@@ -84,12 +77,23 @@ const ProfileScreen = (props) => {
         backgroundColor: '#4285f4',
         padding: 10,
         alignSelf: 'center'
-    }
+    },
+    avatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 75,
+        marginBottom: 20,
+    },
 });
+
 
 
   return (
     <View style={styles.container}>
+      <Image
+          source={{ uri: user.avatar }}
+          style={styles.avatar}
+      />
     <Text style={styles.text}>Name: {user.firstname} {user.lastname}</Text>
     <Text style={styles.text}>Email: {user.email}</Text>
     {isCurrentUser === false ? (

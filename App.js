@@ -20,12 +20,22 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 
 
 const AuthStack = createStackNavigator();
-const AppStack = createBottomTabNavigator();
 const PrivateStack = createStackNavigator();
 const ChatroomStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const UsersStack = createStackNavigator();
 
+const AppStack = createBottomTabNavigator();
+
+//Stack for the sign in/ signup
+function AuthStackScreen() {
+return (
+  <AuthStack.Navigator>
+    <AuthStack.Screen name="Login" component={LoginScreen} />
+    <AuthStack.Screen name="Register" component={RegisterScreen} />
+  </AuthStack.Navigator>
+);
+}
 
 //Stack for the PrivateChats Screen => Private chats list, private chat room, user profile
 function PrivateStackScreen() {
@@ -49,16 +59,6 @@ function ChatroomStackScreen() {
 }
 
 //Stack for the user's profile navigation => profile, update profile, update
-function ProfileStackScreen() {
-  return(
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen name="My profile" component={ProfileScreen} options={{headerLeft: null}} />
-      <ProfileStack.Screen name="Update infos" component={UpdateProfileScreen} options={{ }} />
-    </ProfileStack.Navigator>
-  )
-}
-
-//Stack for the user's profile navigation => profile, update profile, update
 function UsersStackScreen() {
   return(
     <UsersStack.Navigator>
@@ -69,15 +69,17 @@ function UsersStackScreen() {
   )
 }
 
-
-function AuthStackScreen() {
-  return (
-    <AuthStack.Navigator>
-      <AuthStack.Screen name="Login" component={LoginScreen} />
-      <AuthStack.Screen name="Register" component={RegisterScreen} />
-    </AuthStack.Navigator>
-  );
+//Stack for the user's profile navigation => profile, update profile, update
+function ProfileStackScreen() {
+  return(
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="My profile" component={ProfileScreen} options={{headerLeft: null}} />
+      <ProfileStack.Screen name="Update infos" component={UpdateProfileScreen} options={{ }} />
+    </ProfileStack.Navigator>
+  )
 }
+
+
 
 
 function AppStackScreen() {
