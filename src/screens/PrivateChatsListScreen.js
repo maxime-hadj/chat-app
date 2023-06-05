@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from "jwt-decode";
 import io from 'socket.io-client';
 
-const socket = io.connect('http://10.10.4.1:3000')
+const socket = io.connect('http://192.168.0.14:3000')
 
 //Ecran PrivateChatsListScreen => écran de la liste des conversations privées de l'utilisateur (comme sur Messenger)
 // Quand on clique sur un des éléments, on est envoyé vers la conversation privée ( donc PrivateChatScreen)
@@ -46,7 +46,7 @@ const PrivateChatsListScreen = (props) => {
     
     setLoading(true);
 
-    let api = 'http://10.10.4.1:3000/api/message/discussions/'
+    let api = 'http://192.168.0.14:3000/api/message/discussions/'
     const apiUrl = api + userId
 
     fetch(apiUrl, {
@@ -103,19 +103,19 @@ const PrivateChatsListScreen = (props) => {
           return { 
             ...user,
             avatar_to: unknownAvatar,
-            avatar_from: user.avatar_from.replace("localhost", "10.10.4.1")
+            avatar_from: user.avatar_from.replace("localhost", "192.168.0.14")
           }    
         } else if (!user.avatar_from) {
           return { 
             ...user,
             avatar_from: unknownAvatar,
-            avatar_to: user.avatar_to.replace("localhost", "10.10.4.1")
+            avatar_to: user.avatar_to.replace("localhost", "192.168.0.14")
           }    
         } else {
           return { 
             ...user,
-            avatar_from: user.avatar_from.replace("localhost", "10.10.4.1"),
-            avatar_to: user.avatar_to.replace("localhost", "10.10.4.1")
+            avatar_from: user.avatar_from.replace("localhost", "192.168.0.14"),
+            avatar_to: user.avatar_to.replace("localhost", "192.168.0.14")
           }
         }
       });

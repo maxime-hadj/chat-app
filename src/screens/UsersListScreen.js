@@ -21,11 +21,10 @@ const UsersListScreen = (props) =>{
       const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
       const userToken = await AsyncStorage.getItem('user_token');
       const decodedToken = jwtDecode(userToken)
-      console.log(decodedToken.result.id_user)
       const idUser = decodedToken.result.id_user
 
       setLoading(true);
-      fetch('http://10.10.4.1:3000/api/users', {
+      fetch('http://192.168.0.14:3000/api/users', {
           method: 'GET',
           headers:{ Authorization: 'Bearer ' + userToken },
       })
@@ -48,7 +47,7 @@ const UsersListScreen = (props) =>{
           } else {
             return { 
               ...user,
-              avatar: user.avatar.replace("localhost", "10.10.4.1"),
+              avatar: user.avatar.replace("localhost", "192.168.0.14"),
             }
           }
         }).filter(Boolean);
