@@ -32,6 +32,10 @@ useEffect(() => {
       })
     })
     .then(data => data.json())
+
+
+
+    
     .then(data =>  { 
         if(data.data) {
           Alert.alert(data.data)
@@ -136,7 +140,7 @@ useEffect(() => {
     <Text onPress={()=>{props.navigation.navigate('Register')}} style={styles.registerText}>
       Not registered ? Sign up here !
     </Text>
-
+{/* 
     <Button 
   title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
   onPress={() => {
@@ -148,7 +152,7 @@ useEffect(() => {
     borderRadius: 50,
     padding: 10,
   }}
-/>
+/> */}
 </View>
   )
 };

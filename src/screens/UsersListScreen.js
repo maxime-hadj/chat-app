@@ -13,10 +13,10 @@ const UsersListScreen = (props) =>{
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getAllUser();
+        getAllUsers();
     }, []);
 
-    const getAllUser = async () =>    {
+    const getAllUsers = async () =>    {
 
       const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
       const userToken = await AsyncStorage.getItem('user_token');
@@ -24,6 +24,7 @@ const UsersListScreen = (props) =>{
       const idUser = decodedToken.result.id_user
 
       setLoading(true);
+      
       fetch('http://192.168.0.14:3000/api/users', {
           method: 'GET',
           headers:{ Authorization: 'Bearer ' + userToken },

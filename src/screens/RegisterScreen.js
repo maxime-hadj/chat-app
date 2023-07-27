@@ -175,9 +175,8 @@ const RegisterScreen = (props) => {
         onChangeText={text => setEmail(text)}
         id={email}
       /> 
-      <Text>Upload your Avatar</Text>
-      <Button title="Select Image" onPress={pickImage} />
-      {avatar && <Image source={{ uri: avatar.uri }} style={{ width: 200, height: 200 }} 
+      <Button title="Select your avatar" onPress={pickImage} />
+      {avatar && <Image source={{ uri: avatar.uri }} style={{ width: 200, height: 200, margin: 100 }} 
       />}
       <Input
         placeholder='Enter your Password'

@@ -26,11 +26,13 @@ const ProfileScreen = (props) => {
 
     let idUser 
 
+    console.log(props.route.params)
   
     if (props.route.params == undefined) {
       idUser = decodedToken.result.id_user     
     } else  {
       idUser = props.route.params.id_user  
+      // console.log(idUser)
     }
 
     const apiUrl = 'http://192.168.0.14:3000/api/users/'
@@ -42,8 +44,20 @@ const ProfileScreen = (props) => {
     })
     .then(response => response.json())
     .then(response =>{
-      setUser(response.data);
+     
       setLoading(false);
+      console.log(response.data);
+
+      const userData = response.data
+      if (userData.avatar) {
+          userData.avatar = userData.avatar.replace("localhost", "192.168.0.14")
+      } else {
+
+          userData.avatar = unknownAvatar
+      }
+
+      setUser(userData);
+
 
       if (decodedToken.result.id_user == response.data.id_user) {
         setIsCurrentUser(true)
@@ -57,7 +71,11 @@ const ProfileScreen = (props) => {
     })
   }
 
-  getUser();
+  
+  useEffect(() => {
+    getUser();
+  }, []);
+  
 
   
   const styles = StyleSheet.create({
@@ -71,7 +89,10 @@ const ProfileScreen = (props) => {
     text: {
         fontSize: 18,
         color: '#333',
-        marginBottom: 10
+        marginBottom: 10,
+        color: 'darkblue',
+        fontWeight: 'bold'
+
     },
     button: {
         backgroundColor: '#4285f4',
@@ -79,8 +100,8 @@ const ProfileScreen = (props) => {
         alignSelf: 'center'
     },
     avatar: {
-        width: 50,
-        height: 50,
+        width: 200,
+        height: 200,
         borderRadius: 75,
         marginBottom: 20,
     },
@@ -94,8 +115,8 @@ const ProfileScreen = (props) => {
           source={{ uri: user.avatar }}
           style={styles.avatar}
       />
-    <Text style={styles.text}>Name: {user.firstname} {user.lastname}</Text>
-    <Text style={styles.text}>Email: {user.email}</Text>
+    <Text style={styles.text}>{user.firstname} {user.lastname}</Text>
+    <Text style={styles.text}>{user.email}</Text>
     {isCurrentUser === false ? (
         <Button
             title="Discuss"

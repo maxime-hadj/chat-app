@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useLayoutEffect} from 'react';
-import { View, Text, Alert, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { GiftedChat } from 'react-native-gifted-chat'
 import jwt_decode from "jwt-decode";
-import io from 'socket.io-client';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { nanoid } from 'react-native-get-random-values';
+
+import io from 'socket.io-client';
 const socket = io.connect('http://192.168.0.14:3000')
 
 
@@ -24,7 +26,8 @@ const PrivateChatScreen = (props) => {
 
   const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
   const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
-  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "10.10.3.42") || unknownAvatar;
+  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "192.168.0.14") || unknownAvatar;
+  
 
 
 
@@ -78,6 +81,7 @@ const PrivateChatScreen = (props) => {
     })
     .then(data => data.json())
     .then(data =>  { 
+        console.log(data)
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.succes == 1) {
@@ -116,17 +120,20 @@ const PrivateChatScreen = (props) => {
     });
   }
 
+  const avatarPressed = (id) => {
+    props.navigation.navigate('Profile', {
+      id_user: id
+    });
+  }
+
 
   // Call fetching previous messages with layoutEffect
   useLayoutEffect(() => {
     socket.on('privateMessageResponse', (data) =>
-      setMessages([...messages, data]),
-      getMessagesFromDb()
-      );
-   
-    retrieveDarkMode().then(value => {
-      setDarkMode(value);
-    });
+    setMessages([...messages, data]),
+    getMessagesFromDb()
+      
+    );
   }, [socket, messages]);
 
   //Call sending messages in db and then messages from db to reload the discussion
@@ -134,6 +141,18 @@ const PrivateChatScreen = (props) => {
     const { _id, createdAt, text, user,} = messages[0]
     sendMessagesInDb(messages[0].text)
   }, []);
+
+  messages.map(message => {
+    
+  })
+
+  const styles = StyleSheet.create({
+    avatar: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+    },
+  });
   
   const saveDarkMode = async (value) => {
     try {
@@ -159,12 +178,19 @@ const PrivateChatScreen = (props) => {
           showAvatarForEveryMessage={true}
           onSend={messages => onSend(messages)}
           user={{
-              _id: userId,
-              name: userName,
-              avatar: (
-                <TouchableOpacity onPress={() => console.log("Avatar pressed")}>
-                    <Image source={{ uri: userAvatar }} />
-                </TouchableOpacity>
+            _id: userId,
+            name: userName,
+            avatar: userAvatar,
+          }}
+          renderAvatar={props => {
+            const id  = props.currentMessage.user._id;
+            return (
+              <TouchableOpacity onPress={() => avatarPressed(id)}>
+              <Image
+                style={styles.avatar}
+                source={{ uri: props.currentMessage.user.avatar }}
+              />
+            </TouchableOpacity>
             )
           }}
       />
