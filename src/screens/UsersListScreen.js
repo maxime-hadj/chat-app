@@ -24,7 +24,7 @@ const UsersListScreen = (props) =>{
       const idUser = decodedToken.result.id_user
 
       setLoading(true);
-      fetch('http://192.168.0.14:3000/api/users', {
+      fetch('http://192.168.8.137:3000/api/users', {
           method: 'GET',
           headers:{ Authorization: 'Bearer ' + userToken },
       })
@@ -47,7 +47,7 @@ const UsersListScreen = (props) =>{
           } else {
             return { 
               ...user,
-              avatar: user.avatar.replace("localhost", "192.168.0.14"),
+              avatar: user.avatar.replace("localhost", "192.168.8.137"),
             }
           }
         }).filter(Boolean);
