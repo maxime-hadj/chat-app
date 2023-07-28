@@ -35,7 +35,7 @@ const ProfileScreen = (props) => {
       // console.log(idUser)
     }
 
-    const apiUrl = 'http://192.168.0.14:3000/api/users/'
+    const apiUrl = 'http://192.168.1.8:3000/api/users/'
     const fetchUrl = apiUrl + idUser
 
     fetch(fetchUrl, {
@@ -50,7 +50,7 @@ const ProfileScreen = (props) => {
 
       const userData = response.data
       if (userData.avatar) {
-          userData.avatar = userData.avatar.replace("localhost", "192.168.0.14")
+          userData.avatar = userData.avatar.replace("localhost", "192.168.1.8")
       } else {
 
           userData.avatar = unknownAvatar

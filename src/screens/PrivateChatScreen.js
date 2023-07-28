@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { nanoid } from 'nanoid/non-secure';
 
 import io from 'socket.io-client';
-const socket = io.connect('http://192.168.0.14:3000')
+const socket = io.connect('http://192.168.1.8:3000')
 
 
 // Ecran PrivateChatScreen => écran d'une conversation privée entre deux utilisateurs
@@ -18,7 +18,7 @@ const socket = io.connect('http://192.168.0.14:3000')
 
 const PrivateChatScreen = (props) => {
 
-  const apiMessage = 'http://192.168.0.14:3000/api/message/private/'
+  const apiMessage = 'http://192.168.1.8:3000/api/message/private/'
 
   const towardUserId = props.route.params.id_user
   const token = props.route.params.token
@@ -27,7 +27,7 @@ const PrivateChatScreen = (props) => {
 
   const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
   const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
-  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "192.168.0.14") || unknownAvatar;
+  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "192.168.1.8") || unknownAvatar;
   
 
 
@@ -59,7 +59,7 @@ const PrivateChatScreen = (props) => {
           user: {
             _id: data.id_user_from,
             name: data.firstname + ' ' + data.lastname,
-            avatar: data.avatar_from ? data.avatar_from.replace("localhost", "192.168.0.14") : unknownAvatar
+            avatar: data.avatar_from ? data.avatar_from.replace("localhost", "192.168.1.8") : unknownAvatar
           },
         })
         )
@@ -71,7 +71,7 @@ const PrivateChatScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://192.168.0.14:3000/api/message', {
+    fetch('http://192.168.1.8:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ const PrivateChatScreen = (props) => {
         if(data.error) {
           Alert.alert(data.error)
         } else if (data.succes == 1) {
-          fetch('http://192.168.0.14:3000/api/message/private', {
+          fetch('http://192.168.1.8:3000/api/message/private', {
             method:'POST',
             headers: { 'Authorization': 'Bearer ' + token,
                       'Content-Type': 'application/json'

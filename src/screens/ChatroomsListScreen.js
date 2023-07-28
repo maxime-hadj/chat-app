@@ -32,7 +32,7 @@ const ChatroomsListScreen = (props) => {
 
     setLoading(true);
 
-    fetch('http://192.168.0.14:3000/api/channel', {
+    fetch('http://192.168.1.8:3000/api/channel', {
         method: 'GET',
         headers:{ Authorization: 'Bearer ' + userToken },
     })

@@ -25,7 +25,7 @@ const UsersListScreen = (props) =>{
 
       setLoading(true);
       
-      fetch('http://192.168.0.14:3000/api/users', {
+      fetch('http://192.168.1.8:3000/api/users', {
           method: 'GET',
           headers:{ Authorization: 'Bearer ' + userToken },
       })
@@ -43,7 +43,7 @@ const UsersListScreen = (props) =>{
           } else {
             return { 
               ...user,
-              avatar: user.avatar.replace("localhost", "192.168.0.14"),
+              avatar: user.avatar.replace("localhost", "192.168.1.8"),
             }
           }
         }).filter(Boolean);

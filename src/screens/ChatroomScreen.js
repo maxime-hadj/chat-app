@@ -6,8 +6,8 @@ import jwt_decode from "jwt-decode";
 import io from 'socket.io-client'
 import { v4 as uuidv4 } from 'uuid';
 
-
-const socket = io.connect('http://192.168.0.14:3000')
+import { nanoid } from 'nanoid/non-secure';
+const socket = io.connect('http://192.168.1.8:3000')
 
 // Ecran ChatroomScreen => écran avec le contenu de conversation d'un channel 
 // Si on clique sur le nom du channel qui sera en haut de la page, 
@@ -15,7 +15,7 @@ const socket = io.connect('http://192.168.0.14:3000')
 
 const ChatroomScreen = (props) => {
 
-  const apiMessage = 'http://192.168.0.14:3000/api/message/channel/'
+  const apiMessage = 'http://192.168.1.8:3000/api/message/channel/'
 
   const idChannel = props.route.params.id_channel
   const token = props.route.params.token
@@ -23,7 +23,7 @@ const ChatroomScreen = (props) => {
   const userId = decodedToken.result.id_user
   const unknownAvatar = 'https://icon-library.com/images/unknown-person-icon/unknown-person-icon-4.jpg'
   const userName = decodedToken.result.firstname + ' ' + decodedToken.result.lastname
-  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "192.168.0.12") || unknownAvatar;
+  const userAvatar = decodedToken.result.avatar && decodedToken.result.avatar.replace("localhost", "192.168.1.8") || unknownAvatar;
 
   let apiUrl 
 
@@ -54,7 +54,7 @@ const ChatroomScreen = (props) => {
           user: {
             _id: data.id_user,
             name: data.firstname + ' ' + data.lastname,
-            avatar: data.avatar ? data.avatar.replace("localhost", "192.168.0.12") : unknownAvatar
+            avatar: data.avatar ? data.avatar.replace("localhost", "192.168.1.8") : unknownAvatar
             
           }
         }))
@@ -66,7 +66,7 @@ const ChatroomScreen = (props) => {
 
   //Sending messages in database
   const sendMessagesInDb =  async(text) => {
-    fetch('http://192.168.0.14:3000/api/message', {
+    fetch('http://192.168.1.8:3000/api/message', {
       method:'POST',
       headers: { 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -82,12 +82,7 @@ const ChatroomScreen = (props) => {
           alert(data.error)
         } else if (data.succes == 1) {
           console.log(data)
-          socket.emit('message', {
-            text: text,
-            name: userName,
-            id: data.insertId,
-            socketID: socket.id
-          })
+          socket.emit('private message', createMessage(text));
         }
     })
     .catch(function(error) {
