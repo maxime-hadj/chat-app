@@ -95,7 +95,6 @@ const ChatroomsListScreen = (props) => {
   });
 
   return (
-//<ScrollView>
 <View>
   <FlatList
     data={chatrooms}
@@ -116,20 +115,8 @@ const ChatroomsListScreen = (props) => {
     )}
     keyExtractor={item => item.id_channel}
   />
-      {/* <Button 
-  title={darkMode ? 'Dark Mode On' : 'Dark Mode Off'} 
-  onPress={() => {
-    setDarkMode(!darkMode);
-    saveDarkMode(!darkMode);
-  }} 
-  buttonStyle={{
-    backgroundColor: darkMode ? 'green' : 'blue',
-    borderRadius: 50,
-    padding: 10,
-  }}
-/> */}
   </View>
-//</ScrollView>
+
   );
 
 };

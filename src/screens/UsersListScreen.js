@@ -31,15 +31,10 @@ const UsersListScreen = (props) =>{
       })
       .then(response => response.json())
       .then(response =>{
-
-
         const processedUsers = response.data.map(user => {
-
-
           if (user.id_user === idUser){
             return null;
           }
-
           if (!user.avatar) {
             return { 
               ...user,
@@ -52,7 +47,6 @@ const UsersListScreen = (props) =>{
             }
           }
         }).filter(Boolean);
-        
         setUsers(processedUsers);
         setLoading(false);
       })

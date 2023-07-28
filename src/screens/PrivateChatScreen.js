@@ -4,8 +4,9 @@ import { Input, Button } from 'react-native-elements';
 import { GiftedChat } from 'react-native-gifted-chat'
 import jwt_decode from "jwt-decode";
 
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { nanoid } from 'react-native-get-random-values';
+import { nanoid } from 'nanoid/non-secure';
 
 import io from 'socket.io-client';
 const socket = io.connect('http://192.168.0.14:3000')
@@ -101,24 +102,32 @@ const PrivateChatScreen = (props) => {
               if(data.error) {
                 Alert.alert(data.error)
               } else if (data.succes == 1) {
-                socket.emit('private message', {
-                text: text,
-                name: userName,
-                id: '${socket.id}${Math.random()}',
-                  socketID: socket.id
-                })        
+                socket.emit('private message', createMessage(text));   
               }
           })
           .catch(function(error) {
             console.log('There has been a problem with your fetch operation: ' + error.message);
-          });
-        
+          }); 
         }
     })
     .catch(function(error) {
       console.log('There has been a problem with your fetch operation: ' + error.message);
     });
   }
+
+  const createMessage = (text) => {
+    const newMessage = {
+      _id: nanoid(), 
+      text: text,
+      createdAt: new Date(), 
+      user: {
+        _id: userId,
+        name: userName,
+        avatar: userAvatar,
+      },
+    };
+    return newMessage;
+  };
 
   const avatarPressed = (id) => {
     props.navigation.navigate('Profile', {
@@ -127,24 +136,26 @@ const PrivateChatScreen = (props) => {
   }
 
 
-  // Call fetching previous messages with layoutEffect
-  useLayoutEffect(() => {
-    socket.on('privateMessageResponse', (data) =>
-    setMessages([...messages, data]),
-    getMessagesFromDb()
-      
-    );
-  }, [socket, messages]);
-
-  //Call sending messages in db and then messages from db to reload the discussion
-  const onSend = useCallback((messages = []) => {
-    const { _id, createdAt, text, user,} = messages[0]
-    sendMessagesInDb(messages[0].text)
+  const handlePrivateMessageResponse = useCallback((data) => {
+    setMessages((previousMessages) => GiftedChat.append(previousMessages, data));
   }, []);
 
-  messages.map(message => {
-    
-  })
+  useLayoutEffect(() => {
+    socket.on('privateMessageResponse', handlePrivateMessageResponse);
+    getMessagesFromDb();
+
+    return () => {
+      socket.off('privateMessageResponse', handlePrivateMessageResponse);
+    };
+  }, [handlePrivateMessageResponse]);
+
+ 
+  const onSend = useCallback((messages = []) => {
+    const { text } = messages[0];
+    sendMessagesInDb(text);
+
+  }, []);
+
 
   const styles = StyleSheet.create({
     avatar: {
@@ -154,23 +165,6 @@ const PrivateChatScreen = (props) => {
     },
   });
   
-  const saveDarkMode = async (value) => {
-    try {
-      await AsyncStorage.setItem('darkMode', JSON.stringify(value));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const retrieveDarkMode = async () => {
-    try {
-      const value = await AsyncStorage.getItem('darkMode');
-      if (value !== null) {
-        return JSON.parse(value);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   return (
       <GiftedChat

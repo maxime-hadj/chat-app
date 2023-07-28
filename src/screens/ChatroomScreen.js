@@ -4,6 +4,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import jwt_decode from "jwt-decode";
 import io from 'socket.io-client'
+import { v4 as uuidv4 } from 'uuid';
 
 
 const socket = io.connect('http://192.168.0.14:3000')
@@ -80,10 +81,11 @@ const ChatroomScreen = (props) => {
         if(data.error) {
           alert(data.error)
         } else if (data.succes == 1) {
+          console.log(data)
           socket.emit('message', {
             text: text,
             name: userName,
-            id: '${socket.id}${Math.random()}',
+            id: data.insertId,
             socketID: socket.id
           })
         }
@@ -94,39 +96,36 @@ const ChatroomScreen = (props) => {
   }
 
 
-  //Call fetching previous messages with layoutEffect
-  useLayoutEffect(() => {
-    socket.on('messageResponse', (data) => setMessages([...messages, data]));
-    getMessagesFromDb()
-    retrieveDarkMode().then(value => {
-      setDarkMode(value);
-    });
-  }, [socket, messages]);
+  const createMessage = (text) => {
+    const newMessage = {
+      _id: nanoid(), 
+      text: text,
+      createdAt: new Date(), 
+      user: {
+        _id: userId,
+        name: userName,
+        avatar: userAvatar,
+      },
+    };
+    return newMessage;
+  };
+
 
   //Call sending messages in db and then messages from db to reload the discussion
   const onSend = useCallback((messages = []) => {
     const { _id, createdAt, text, user,} = messages[0]
     sendMessagesInDb(messages[0].text)
+    getMessagesFromDb();
   }, []);
   
-  const saveDarkMode = async (value) => {
-    try {
-      await AsyncStorage.setItem('darkMode', JSON.stringify(value));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const retrieveDarkMode = async () => {
-    try {
-      const value = await AsyncStorage.getItem('darkMode');
-      if (value !== null) {
-        return JSON.parse(value);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  useEffect(() => {
+    socket.on('messageResponse', (data) => setMessages((previousMessages) => GiftedChat.append(previousMessages, data)));
+    getMessagesFromDb();
+  
+    return () => {
+      socket.off('messageResponse');
+    };
+  }, []);
 
   return (
       <GiftedChat

@@ -17,14 +17,14 @@ const PrivateChatsListScreen = (props) => {
   const [token, setToken] = useState('')
   const [userFirstname, setUserFirstname] = useState('')
 
+  
+
   useLayoutEffect(() => {
     socket.on('privateMessageResponse', (data) => {
       console.log('private message received')
       getAllDiscussions();
     });
     getAllDiscussions();
-    retrieveDarkMode().then(value => {
-    setDarkMode(value)});
   }, [socket]);
 
   const [darkMode, setDarkMode] = useState(false);
